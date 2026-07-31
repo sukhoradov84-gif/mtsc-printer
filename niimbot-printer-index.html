@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>МТСК · Печать наклейки</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #EEF1F6;
+      color: #16233F;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .card {
+      background: #fff;
+      border-radius: 4px;
+      box-shadow: 0 4px 20px rgba(22,35,63,0.12);
+      padding: 32px;
+      width: 100%;
+      max-width: 380px;
+      text-align: center;
+      border-top: 4px solid #C43E1D;
+    }
+    .eyebrow {
+      font-family: 'Courier New', monospace;
+      font-size: 10px;
+      letter-spacing: 2px;
+      color: #6B7686;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+    h1 {
+      font-size: 20px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 20px;
+    }
+    .order-id {
+      font-family: 'Courier New', monospace;
+      font-size: 22px;
+      font-weight: 700;
+      color: #16233F;
+      background: #EEF1F6;
+      padding: 8px 16px;
+      border-radius: 3px;
+      margin-bottom: 20px;
+      display: inline-block;
+    }
+    #qrPreview {
+      margin: 0 auto 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    #qrPreview canvas, #qrPreview img {
+      border: 1px solid #D9E0EA;
+      border-radius: 3px;
+    }
+    .btn {
+      display: block;
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 3px;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+      cursor: pointer;
+      margin-bottom: 10px;
+      text-transform: uppercase;
+    }
+    .btn-primary { background: #16233F; color: #fff; }
+    .btn-primary:hover { background: #223259; }
+    .btn-primary:disabled { background: #B7BFC8; cursor: default; }
+    .btn-secondary { background: #EEF1F6; color: #16233F; border: 1px solid #D9E0EA; }
+    .btn-secondary:hover { border-color: #16233F; }
+    .status {
+      margin-top: 12px;
+      font-size: 13px;
+      min-height: 20px;
+      color: #6B7686;
+    }
+    .status.ok { color: #1F7A5C; }
+    .status.err { color: #C43E1D; }
+    .status.info { color: #2B5FA8; }
+    .size-row {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+    .size-row label {
+      font-size: 11px;
+      color: #6B7686;
+      text-align: left;
+      display: block;
+      margin-bottom: 3px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+    .size-row input {
+      width: 100%;
+      padding: 7px 8px;
+      border: 1px solid #D9E0EA;
+      border-radius: 3px;
+      font-size: 14px;
+      text-align: center;
+    }
+    .tear-line {
+      border-bottom: 2px dashed #C7CFDC;
+      margin: 20px 0;
+    }
+    .hint {
+      font-size: 11.5px;
+      color: #6B7686;
+      line-height: 1.5;
+    }
+    .hint a { color: #2B5FA8; }
+  </style>
+</head>
+<body>
+<div class="card">
+  <div class="eyebrow">МТСК · Складской модуль</div>
+  <h1>🖨️ Печать наклейки</h1>
+
+  <div id="orderIdDisplay" class="order-id">—</div>
+
+  <div id="qrPreview"></div>
+
+  <div class="tear-line"></div>
+
+  <div class="size-row">
+    <div style="flex:1">
+      <label>Ширина (px)</label>
+      <input type="number" id="labelWidth" value="240" min="96" max="384">
+    </div>
+    <div style="flex:1">
+      <label>Высота (px)</label>
+      <input type="number" id="labelHeight" value="240" min="96" max="600">
+    </div>
+  </div>
+
+  <button class="btn btn-primary" id="connectBtn" onclick="connectPrinter()">
+    🔵 Подключить B1
+  </button>
+  <button class="btn btn-primary" id="printBtn" onclick="printLabel()" disabled>
+    🖨️ Напечатать
+  </button>
+  <button class="btn btn-secondary" onclick="regenerateQR()">
+    🔄 Обновить QR
+  </button>
+
+  <div class="status" id="status">Нажмите «Подключить B1» для начала работы</div>
+
+  <div class="tear-line"></div>
+  <div class="hint">
+    Работает только в <strong>Chrome</strong> на компьютере или Android.<br>
+    Bluetooth должен быть включён.<br>
+    Принтер должен быть включён и в зоне видимости.
+  </div>
+</div>
+
+<!-- QRCode.js для предпросмотра -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+<!-- niimbluelib через esm.sh — единственный способ без сборщика -->
+<script type="module">
+  // ============================================================
+  // КОНФИГУРАЦИЯ — поменяй ENGINEER_CABINET_URL на свой URL
+  // ============================================================
+  const ENGINEER_CABINET_URL = 'https://script.google.com/macros/s/ВСТАВЬ_СВОЙ_URL/exec';
+
+  // ============================================================
+  // Импорт niimbluelib
+  // ============================================================
+  let NiimbotBluetoothClient, ImageEncoder;
+  try {
+    const lib = await import('https://esm.sh/@mmote/niimbluelib@0.0.1-alpha.40');
+    NiimbotBluetoothClient = lib.NiimbotBluetoothClient;
+    ImageEncoder = lib.ImageEncoder;
+  } catch(e) {
+    setStatus('Не удалось загрузить библиотеку принтера: ' + e.message, 'err');
+  }
+
+  let client = null;
+  let orderId = '';
+
+  // Читаем orderId из URL
+  function getOrderId() {
+    const params = new URLSearchParams(window.location.search);
+    return params.get('orderId') || '';
+  }
+
+  // Строим URL для QR — ведёт в кабинет инженера с параметром orderId
+  function buildQrUrl(oid) {
+    return ENGINEER_CABINET_URL + '?orderId=' + encodeURIComponent(oid);
+  }
+
+  function setStatus(msg, cls) {
+    const el = document.getElementById('status');
+    el.textContent = msg;
+    el.className = 'status' + (cls ? ' ' + cls : '');
+  }
+
+  // Рисуем QR для предпросмотра через QRCode.js
+  function renderQrPreview(oid) {
+    const container = document.getElementById('qrPreview');
+    container.innerHTML = '';
+    if (!oid) { container.innerHTML = '<div style="color:#bbb;font-size:13px;">ID заказа не указан</div>'; return; }
+    new QRCode(container, {
+      text: buildQrUrl(oid),
+      width: 180,
+      height: 180,
+      colorDark: '#000000',
+      colorLight: '#ffffff',
+      correctLevel: QRCode.CorrectLevel.H
+    });
+  }
+
+  // Рисуем QR на canvas для отправки в принтер
+  function buildPrintCanvas(oid, width, height) {
+    return new Promise((resolve, reject) => {
+      const canvas = document.createElement('canvas');
+      canvas.width = width;
+      canvas.height = height;
+      const ctx = canvas.getContext('2d');
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(0, 0, width, height);
+
+      // Рисуем QR через временный div
+      const tmp = document.createElement('div');
+      tmp.style.cssText = 'position:absolute;left:-9999px;top:-9999px;';
+      document.body.appendChild(tmp);
+      const qr = new QRCode(tmp, {
+        text: buildQrUrl(oid),
+        width: Math.min(width, height),
+        height: Math.min(width, height),
+        colorDark: '#000000',
+        colorLight: '#ffffff',
+        correctLevel: QRCode.CorrectLevel.H
+      });
+      setTimeout(() => {
+        const img = tmp.querySelector('img') || tmp.querySelector('canvas');
+        if (!img) { document.body.removeChild(tmp); reject(new Error('QR не сгенерирован')); return; }
+        const qrSize = Math.min(width, height);
+        const x = Math.floor((width - qrSize) / 2);
+        const y = Math.floor((height - qrSize) / 2);
+        if (img.tagName === 'CANVAS') {
+          ctx.drawImage(img, x, y, qrSize, qrSize);
+        } else {
+          img.onload = () => { ctx.drawImage(img, x, y, qrSize, qrSize); document.body.removeChild(tmp); resolve(canvas); };
+          img.onerror = () => { document.body.removeChild(tmp); reject(new Error('Ошибка изображения QR')); };
+          if (img.complete) { ctx.drawImage(img, x, y, qrSize, qrSize); document.body.removeChild(tmp); resolve(canvas); }
+          return;
+        }
+        document.body.removeChild(tmp);
+        resolve(canvas);
+      }, 200);
+    });
+  }
+
+  window.regenerateQR = function() {
+    renderQrPreview(orderId);
+  };
+
+  window.connectPrinter = async function() {
+    if (!NiimbotBluetoothClient) { setStatus('Библиотека не загружена', 'err'); return; }
+    if (!navigator.bluetooth) {
+      setStatus('Web Bluetooth не поддерживается. Используйте Chrome на ПК или Android.', 'err');
+      return;
+    }
+    const btn = document.getElementById('connectBtn');
+    btn.disabled = true;
+    btn.textContent = '⏳ Подключение...';
+    setStatus('Выбери принтер в диалоге браузера...', 'info');
+    try {
+      client = new NiimbotBluetoothClient();
+      client.addEventListener('connect', () => {
+        setStatus('✅ Принтер подключён!', 'ok');
+        document.getElementById('printBtn').disabled = false;
+        btn.textContent = '✅ B1 подключён';
+      });
+      client.addEventListener('disconnect', () => {
+        setStatus('Принтер отключён', '');
+        document.getElementById('printBtn').disabled = true;
+        btn.disabled = false;
+        btn.textContent = '🔵 Подключить B1';
+        client = null;
+      });
+      await client.connect();
+    } catch(e) {
+      setStatus('Ошибка подключения: ' + e.message, 'err');
+      btn.disabled = false;
+      btn.textContent = '🔵 Подключить B1';
+      client = null;
+    }
+  };
+
+  window.printLabel = async function() {
+    if (!client) { setStatus('Принтер не подключён', 'err'); return; }
+    if (!orderId) { setStatus('ID заказа не задан', 'err'); return; }
+    const btn = document.getElementById('printBtn');
+    btn.disabled = true;
+    btn.textContent = '⏳ Печать...';
+    setStatus('Подготовка изображения...', 'info');
+    try {
+      const width = parseInt(document.getElementById('labelWidth').value) || 240;
+      const height = parseInt(document.getElementById('labelHeight').value) || 240;
+      const canvas = await buildPrintCanvas(orderId, width, height);
+      setStatus('Отправка на принтер...', 'info');
+      const encoded = ImageEncoder.encodeCanvas(canvas, 'left');
+      await client.print(encoded, {
+        quantity: 1,
+        labelType: 1,
+        density: 3
+      });
+      setStatus('✅ Наклейка распечатана!', 'ok');
+    } catch(e) {
+      setStatus('Ошибка печати: ' + e.message, 'err');
+    } finally {
+      btn.disabled = false;
+      btn.textContent = '🖨️ Напечатать';
+    }
+  };
+
+  // Инициализация
+  orderId = getOrderId();
+  document.getElementById('orderIdDisplay').textContent = orderId || '(ID не указан)';
+  renderQrPreview(orderId);
+
+  if (!orderId) {
+    setStatus('⚠️ В URL не передан orderId. Пример: ?orderId=ORD-20260730-001', 'err');
+  }
+</script>
+</body>
+</html>
