@@ -113,8 +113,8 @@
 <!-- QRCode.js для предпросмотра -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
-<!-- niimbluelib — локальная копия v0.0.1-alpha.40, надёжнее CDN -->
-<script src="./niimbluelib.min.js" onload="onLibLoaded()" onerror="onLibError()"></script>
+<!-- niimbluelib — локальная копия v0.0.1-alpha.40 -->
+<script src="./niimbluelib.min.js"></script>
 
 <script>
   // ============================================================
@@ -127,9 +127,13 @@
   let NiimbotBluetoothClient = null;
   let ImageEncoder = null;
 
-  function onLibLoaded() {
+  function initLib() {
     try {
-      // UMD версия доступна через глобальный неймспейс niimbluelib
+      if (typeof niimbluelib === 'undefined') {
+        document.getElementById('libStatus').textContent = '❌ Библиотека не загружена (файл niimbluelib.min.js не найден)';
+        setStatus('Убедитесь что файл niimbluelib.min.js загружен в репозиторий рядом с index.html', 'err');
+        return;
+      }
       NiimbotBluetoothClient = niimbluelib.NiimbotBluetoothClient;
       ImageEncoder = niimbluelib.ImageEncoder;
       document.getElementById('libStatus').textContent = '✅ Библиотека загружена';
@@ -141,10 +145,8 @@
     }
   }
 
-  function onLibError() {
-    document.getElementById('libStatus').textContent = '❌ Не удалось загрузить библиотеку';
-    setStatus('Ошибка загрузки библиотеки принтера. Проверьте интернет-соединение.', 'err');
-  }
+  function onLibLoaded() { /* не используется */ }
+  function onLibError() { /* не используется */ }
 
   function getOrderId() {
     const params = new URLSearchParams(window.location.search);
@@ -295,15 +297,17 @@
     }
   };
 
-  // Инициализация
-  orderId = getOrderId();
-  document.getElementById('orderIdDisplay').textContent = orderId || '(ID не указан)';
-  renderQrPreview(orderId);
-  if (!orderId) {
-    setStatus('⚠️ В URL не передан orderId. Пример: ?orderId=ORD-00041', 'err');
-  } else {
-    setStatus('Загрузка библиотеки...', 'info');
-  }
+  // Инициализация — запускаем когда DOM и все скрипты загружены
+  window.addEventListener('load', function() {
+    orderId = getOrderId();
+    document.getElementById('orderIdDisplay').textContent = orderId || '(ID не указан)';
+    renderQrPreview(orderId);
+    if (!orderId) {
+      setStatus('⚠️ В URL не передан orderId. Пример: ?orderId=ORD-00041', 'err');
+    }
+    // Инициализируем библиотеку — к этому моменту niimbluelib.min.js уже загружен
+    initLib();
+  });
 </script>
 </body>
 </html>
