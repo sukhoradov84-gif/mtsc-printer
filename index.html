@@ -84,11 +84,11 @@
   <div class="size-row">
     <div style="flex:1">
       <label>Ширина (px)</label>
-      <input type="number" id="labelWidth" value="240" min="96" max="384">
+      <input type="number" id="labelWidth" value="320" min="96" max="384">
     </div>
     <div style="flex:1">
       <label>Высота (px)</label>
-      <input type="number" id="labelHeight" value="240" min="96" max="600">
+      <input type="number" id="labelHeight" value="320" min="96" max="600">
     </div>
   </div>
   <div id="libStatus">Загрузка библиотеки принтера...</div>
@@ -203,7 +203,7 @@
       setTimeout(() => {
         const img = tmp.querySelector('img') || tmp.querySelector('canvas');
         if (!img) { document.body.removeChild(tmp); reject(new Error('QR не сгенерирован')); return; }
-        const qrSize = Math.min(width, height);
+        const qrSize = Math.min(width, height) - 40; // отступ 20px с каждой стороны
         const x = Math.floor((width - qrSize) / 2);
         const y = Math.floor((height - qrSize) / 2);
         const finish = () => { document.body.removeChild(tmp); resolve(canvas); };
@@ -292,8 +292,8 @@
     btn.textContent = '⏳ Печать...';
     setStatus('Подготовка изображения...', 'info');
     try {
-      const width = parseInt(document.getElementById('labelWidth').value) || 240;
-      const height = parseInt(document.getElementById('labelHeight').value) || 240;
+      const width = parseInt(document.getElementById('labelWidth').value) || 320;
+      const height = parseInt(document.getElementById('labelHeight').value) || 320;
       const canvas = await buildPrintCanvas(orderId, width, height);
       setStatus('Отправка на принтер...', 'info');
 
