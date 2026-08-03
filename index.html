@@ -297,18 +297,26 @@
       const canvas = await buildPrintCanvas(orderId, width, height);
       setStatus('Отправка на принтер...', 'info');
 
-      // Получаем тип задачи из модели принтера
+      // Получаем тип задачи печати для конкретной модели
       const printTaskType = client.getPrintTaskType();
-      const printTask = client.createPrintTask(printTaskType, {
+      if (!printTaskType) {
+        throw new Error('Не удалось определить тип задачи для этой модели принтера');
+      }
+
+      // newPrintTask — метод abstraction, не клиента
+      const printTask = client.abstraction.newPrintTask(printTaskType, {
         quantity: 1,
         labelType: 1,
         density: 3,
+        totalPages: 1,
       });
 
-      // Кодируем canvas в формат принтера
-      const page = ImageEncoder.encodeCanvas(canvas, 'left');
-      await printTask.printPage(page);
+      // Инициализируем задачу, кодируем canvas и печатаем
+      const encodedImage = ImageEncoder.encodeCanvas(canvas, 'top');
+      await printTask.printInit();
+      await printTask.printPage(encodedImage);
       await printTask.waitForFinished();
+      await printTask.printEnd();
 
       setStatus('✅ Наклейка распечатана!', 'ok');
     } catch(e) {
