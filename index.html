@@ -120,7 +120,7 @@
   // ============================================================
   // КОНФИГУРАЦИЯ
   // ============================================================
-  const ENGINEER_CABINET_URL = 'https://script.google.com/macros/s/AKfycbwipZLCMyByQDkVqs_j_LOuTcd8xGTr6OMGi3DgOsU8d6rFAXWZFRGmJskU2Q4AdjNr/exec';
+  const SCAN_PAGE_URL = 'https://sukhoradov84-gif.github.io/mtsc-printer/scan.html';
 
   let client = null;
   let orderId = '';
@@ -154,7 +154,7 @@
   }
 
   function buildQrUrl(oid) {
-    return ENGINEER_CABINET_URL + '?orderId=' + encodeURIComponent(oid);
+    return SCAN_PAGE_URL + '?orderId=' + encodeURIComponent(oid);
   }
 
   function setStatus(msg, cls) {
