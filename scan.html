@@ -41,7 +41,6 @@
     .btn-secondary { background: #EEF1F6; color: #16233F; border: 1px solid #D9E0EA; }
     .btn-secondary:hover { border-color: #16233F; }
     .hint { font-size: 11px; color: #6B7686; margin-top: 16px; line-height: 1.5; }
-    .err { color: #C43E1D; font-size: 14px; padding: 20px 0; }
   </style>
 </head>
 <body>
@@ -55,37 +54,31 @@
 </div>
 
 <script>
-  const ENGINEER_APP_URL = 'https://script.google.com/macros/s/AKfycbwipZLCMyByQDkVqs_j_LOuTcd8xGTr6OMGi3DgOsU8d6rFAXWZFRGmJskU2Q4AdjNr/exec';
+  // URL кабинетов
+  const ENGINEER_APP_URL  = 'https://script.google.com/macros/s/AKfycbwipZLCMyByQDkVqs_j_LOuTcd8xGTr6OMGi3DgOsU8d6rFAXWZFRGmJskU2Q4AdjNr/exec';
+  const WAREHOUSE_APP_URL = 'https://script.google.com/macros/s/AKfycbz0vr8KEFsXgRBU6sZ_mfQFTdmRAnXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX/exec'; // замени на реальный URL
 
-  const params = new URLSearchParams(window.location.search);
+  const params  = new URLSearchParams(window.location.search);
   const orderId = params.get('orderId') || '';
 
-  const display = document.getElementById('orderIdDisplay');
-  const sub = document.getElementById('subText');
-  const buttons = document.getElementById('buttons');
-  const hint = document.getElementById('hint');
+  document.getElementById('orderIdDisplay').textContent = orderId || '(ID не указан)';
 
   if (!orderId) {
-    display.textContent = 'Ошибка';
-    sub.innerHTML = '<span style="color:#C43E1D">ID заказа не указан.<br>Используйте QR-код с наклейки.</span>';
+    document.getElementById('subText').innerHTML = '<span style="color:#C43E1D">ID заказа не указан.<br>Используйте QR-код с наклейки.</span>';
   } else {
-    display.textContent = orderId;
-    sub.textContent = 'Отсканирован QR-код запчасти. Выберите действие:';
+    document.getElementById('subText').textContent = 'Выберите кабинет для просмотра карточки заказа:';
 
-    // Кнопка «Подтвердить получение» — ведёт в кабинет инженера
-    // который уже знает кто залогинен и выполнит подтверждение
-    const confirmUrl = ENGINEER_APP_URL + '?action=confirm_part&orderId=' + encodeURIComponent(orderId);
-    const selfUrl    = ENGINEER_APP_URL + '?action=self_pickup&orderId='  + encodeURIComponent(orderId);
-    const viewUrl    = ENGINEER_APP_URL + '?action=view_order&orderId='   + encodeURIComponent(orderId);
+    const viewUrl      = ENGINEER_APP_URL  + '?action=view_order&orderId=' + encodeURIComponent(orderId);
+    const warehouseUrl = WAREHOUSE_APP_URL + '?action=view_order&orderId=' + encodeURIComponent(orderId);
 
-    buttons.innerHTML =
-      '<a class="btn btn-primary" href="' + confirmUrl + '">✅ Подтвердить получение</a>' +
-      '<a class="btn btn-primary" href="' + selfUrl + '">🚶 Я забрал сам (в обход склада)</a>' +
-      '<a class="btn btn-secondary" href="' + viewUrl + '">👁️ Просмотр карточки заказа</a>';
+    document.getElementById('buttons').innerHTML =
+      '<a class="btn btn-primary"   href="' + viewUrl      + '">👷 Открыть в кабинете инженера</a>' +
+      '<a class="btn btn-secondary" href="' + warehouseUrl + '">📦 Открыть в складском кабинете</a>';
 
-    hint.innerHTML =
-      'Кнопки открывают кабинет инженера.<br>' +
-      'Если вы не инженер — используйте «Просмотр».';
+    document.getElementById('hint').innerHTML =
+      'Инженеры — первая кнопка.<br>' +
+      'Кладовщик — вторая кнопка.<br>' +
+      'Кнопки подтверждения будут внутри карточки заказа.';
   }
 </script>
 </body>
