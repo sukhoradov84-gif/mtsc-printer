@@ -113,37 +113,44 @@
 <!-- QRCode.js для предпросмотра -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
-<!-- niimbluelib — локальная копия v0.0.1-alpha.40 -->
-<script src="./niimbluelib.min.js"></script>
-
-<script>
+<!-- niimbluelib загружается через ESM import в основном скрипте -->
+<script type="module">
   // ============================================================
   // КОНФИГУРАЦИЯ
   // ============================================================
   const SCAN_PAGE_URL = 'https://sukhoradov84-gif.github.io/mtsc-printer/scan.html';
 
-  let client = null;
-  let orderId = '';
+  // Импортируем локальный ESM файл
   let NiimbotBluetoothClient = null;
   let ImageEncoder = null;
 
-  function initLib() {
+  // Пробуем локальный ESM, если нет — esm.sh
+  async function loadLib() {
     try {
-      if (typeof niimbluelib === 'undefined') {
-        document.getElementById('libStatus').textContent = '❌ Библиотека не загружена (файл niimbluelib.min.js не найден)';
-        setStatus('Убедитесь что файл niimbluelib.min.js загружен в репозиторий рядом с index.html', 'err');
-        return;
-      }
-      NiimbotBluetoothClient = niimbluelib.NiimbotBluetoothClient;
-      ImageEncoder = niimbluelib.ImageEncoder;
+      // Попытка 1: локальный файл как ESM (нужен niimbluelib.esm.js)
+      const lib = await import('./niimbluelib.esm.js');
+      NiimbotBluetoothClient = lib.NiimbotBluetoothClient;
+      ImageEncoder = lib.ImageEncoder;
+    } catch(e) {
+      // Попытка 2: esm.sh CDN
+      const lib = await import('https://esm.sh/@mmote/niimbluelib@0.0.1-alpha.40');
+      NiimbotBluetoothClient = lib.NiimbotBluetoothClient;
+      ImageEncoder = lib.ImageEncoder;
+    }
+    if (NiimbotBluetoothClient && ImageEncoder) {
       document.getElementById('libStatus').textContent = '✅ Библиотека загружена';
       document.getElementById('connectBtn').disabled = false;
       setStatus('Нажмите «Подключить B1» для начала работы', '');
-    } catch(e) {
-      document.getElementById('libStatus').textContent = '❌ Ошибка инициализации: ' + e.message;
-      setStatus('Не удалось инициализировать библиотеку', 'err');
+    } else {
+      document.getElementById('libStatus').textContent = '❌ Не удалось загрузить библиотеку';
+      setStatus('Ошибка загрузки библиотеки', 'err');
     }
   }
+
+  let client = null;
+  let orderId = '';
+
+  function initLib() { /* заменена на loadLib() выше */ }
 
   function onLibLoaded() { /* не используется */ }
   function onLibError() { /* не используется */ }
@@ -237,6 +244,12 @@
     setStatus('Выберите принтер в диалоге браузера...', 'info');
     try {
       client = new NiimbotBluetoothClient();
+      if (!client) throw new Error('Не удалось создать экземпляр клиента принтера');
+
+      // Проверяем что у клиента есть метод connect
+      if (typeof client.connect !== 'function') {
+        throw new Error('API библиотеки изменился — метод connect не найден. Версия: ' + (niimbluelib.version || 'неизвестна'));
+      }
 
       client.on('connect', () => {
         setStatus('✅ Принтер подключён!', 'ok');
@@ -336,8 +349,11 @@
     if (!orderId) {
       setStatus('⚠️ В URL не передан orderId. Пример: ?orderId=ORD-00041', 'err');
     }
-    // Инициализируем библиотеку — к этому моменту niimbluelib.min.js уже загружен
-    initLib();
+    // Загружаем библиотеку через ESM
+    loadLib().catch(function(e) {
+      document.getElementById('libStatus').textContent = '❌ ' + e.message;
+      setStatus('Ошибка загрузки библиотеки', 'err');
+    });
   });
 </script>
 </body>
