@@ -350,12 +350,12 @@ function drawLabelOnCanvas(ctx, w, h, qrImg, id, name, sub) {
 
   if (w > h) {
     // ── ГОРИЗОНТАЛЬНАЯ ЛЕНТА: QR слева, текст справа ──
-    const qrSize = h - PAD * 2;
-    const qrX    = PAD;
-    const qrY    = PAD;
+    const qrSize = h - PAD;          // QR чуть меньше — отступ только сверху/снизу
+    const qrX    = 0;                // вплотную к левому краю
+    const qrY    = Math.round((h - qrSize) / 2);
     ctx.drawImage(qrImg, qrX, qrY, qrSize, qrSize);
 
-    const textX    = qrX + qrSize + PAD;
+    const textX    = qrSize + PAD;
     const maxTextW = w - textX - PAD;
 
     const idSize   = Math.round(h * 0.17);
