@@ -317,9 +317,9 @@ window.updatePreview = function() {
   const tmp = document.createElement('div');
   tmp.style.cssText = 'position:absolute;left:-9999px;top:-9999px;';
   document.body.appendChild(tmp);
-  const qrSize = Math.round(Math.min(pw, ph) * 0.65);
+  const qrMax = Math.min(pw, ph);
   new QRCode(tmp, {
-    text: qrUrl, width: qrSize, height: qrSize,
+    text: qrUrl, width: qrMax, height: qrMax,
     colorDark: '#000000', colorLight: '#ffffff',
     correctLevel: QRCode.CorrectLevel.H
   });
@@ -328,58 +328,80 @@ window.updatePreview = function() {
     const img = tmp.querySelector('img') || tmp.querySelector('canvas');
     const drawQr = (src) => {
       document.body.removeChild(tmp);
-      const landscape = pw > ph;
-      let qrX, qrY;
-      if (landscape) {
-        qrX = Math.round((ph - qrSize) / 2);
-        qrY = Math.round((ph - qrSize) / 2);
-      } else {
-        qrX = Math.round((pw - qrSize) / 2);
-        qrY = 6;
-      }
-      ctx.drawImage(src, qrX, qrY, qrSize, qrSize);
-
-      ctx.fillStyle = '#000000';
-      ctx.textAlign = landscape ? 'left' : 'center';
-      const tx = landscape ? (qrX + qrSize + 8) : pw / 2;
-      let ty   = landscape ? 16 : (qrY + qrSize + 8);
-
-      const maxW = landscape ? (pw - tx - 4) : pw - 8;
-      const base = Math.min(ph, pw);
-      // ID
-      const idSize = Math.round(base * 0.09);
-      ctx.font = `bold ${idSize}px Courier New`;
-      ctx.fillText(id, tx, ty, maxW);
-      ty += Math.round(idSize * 1.3);
-      // Наименование — перенос если длинное
-      const nameSize = Math.round(base * 0.07);
-      ctx.font = `${nameSize}px Segoe UI`;
-      const words = name.split(' ');
-      let line = '';
-      for (const w of words) {
-        const test = line ? line + ' ' + w : w;
-        if (ctx.measureText(test).width > maxW && line) {
-          ctx.fillText(line, tx, ty, maxW);
-          ty += Math.round(nameSize * 1.25);
-          line = w;
-        } else { line = test; }
-      }
-      if (line) { ctx.fillText(line, tx, ty, maxW); ty += Math.round(nameSize * 1.25); }
-      // Подстрока (ЛПУ или артикул)
-      if (sub) {
-        ctx.fillStyle = '#555555';
-        const subSize = Math.round(base * 0.065);
-        ctx.font = `${subSize}px Segoe UI`;
-        ctx.fillText(sub, tx, ty, maxW);
-      }
+      drawLabelOnCanvas(ctx, pw, ph, src, id, name, sub);
     };
-
     if (!img) { document.body.removeChild(tmp); return; }
     if (img.tagName === 'CANVAS') { drawQr(img); }
     else if (img.complete) { drawQr(img); }
     else { img.onload = () => drawQr(img); }
   }, 250);
 };
+
+// ============================================================
+// ЕДИНАЯ ФУНКЦИЯ ОТРИСОВКИ НАКЛЕЙКИ
+// Работает и для превью и для печати
+// ============================================================
+function drawLabelOnCanvas(ctx, w, h, qrImg, id, name, sub) {
+  const FONT  = 'Courier New, monospace';
+  const PAD   = Math.round(Math.min(w, h) * 0.04);
+  const GAP   = Math.round(Math.min(w, h) * 0.025);
+  const maxW  = w - PAD * 2;
+
+  const idSize   = Math.round(Math.min(w, h) * 0.088);
+  const nameSize = Math.round(Math.min(w, h) * 0.074);
+  const subSize  = Math.round(Math.min(w, h) * 0.065);
+
+  // Разбиваем наименование на строки
+  ctx.font = `bold ${nameSize}px ${FONT}`;
+  const nameLines = [];
+  let line = '';
+  for (const word of name.split(' ')) {
+    const test = line ? line + ' ' + word : word;
+    if (ctx.measureText(test).width > maxW && line) {
+      nameLines.push(line); line = word;
+    } else { line = test; }
+  }
+  if (line) nameLines.push(line);
+
+  // Считаем высоту текстового блока
+  const lineH_id   = Math.round(idSize   * 1.2);
+  const lineH_name = Math.round(nameSize * 1.2);
+  const lineH_sub  = Math.round(subSize  * 1.2);
+  const textH = lineH_id
+              + GAP + nameLines.length * lineH_name
+              + (sub ? GAP + lineH_sub : 0);
+
+  // QR — занимает всё что осталось после отступов и текста
+  const qrAvail = h - PAD * 2 - GAP - textH;
+  const qrSize  = Math.max(Math.min(qrAvail, w - PAD * 2), 32);
+  const qrX     = Math.round((w - qrSize) / 2);
+  const qrY     = PAD;
+
+  ctx.fillStyle = '#ffffff';
+  ctx.fillRect(0, 0, w, h);
+  ctx.drawImage(qrImg, qrX, qrY, qrSize, qrSize);
+
+  // Текст — прямо под QR
+  ctx.fillStyle = '#000000';
+  ctx.textAlign = 'center';
+  let ty = qrY + qrSize + GAP + idSize;
+
+  ctx.font = `bold ${idSize}px ${FONT}`;
+  ctx.fillText(id, w / 2, ty, maxW);
+  ty += lineH_id + GAP;
+
+  ctx.font = `bold ${nameSize}px ${FONT}`;
+  for (const l of nameLines) {
+    ctx.fillText(l, w / 2, ty, maxW);
+    ty += lineH_name;
+  }
+
+  if (sub) {
+    ty += GAP;
+    ctx.font = `bold ${subSize}px ${FONT}`;
+    ctx.fillText(sub, w / 2, ty, maxW);
+  }
+}
 
 // ============================================================
 // ПЕЧАТЬ — canvas для принтера (полный размер)
@@ -397,15 +419,14 @@ function buildPrintCanvas() {
     canvas.width  = currentW;
     canvas.height = currentH;
     const ctx = canvas.getContext('2d');
-    ctx.fillStyle = '#ffffff';
-    ctx.fillRect(0, 0, currentW, currentH);
 
     const tmp = document.createElement('div');
     tmp.style.cssText = 'position:absolute;left:-9999px;top:-9999px;';
     document.body.appendChild(tmp);
-    const qrSize = Math.round(Math.min(currentW, currentH) * 0.65);
+    // QR генерируем максимальным — drawLabelOnCanvas сам посчитает нужный размер
+    const qrMax = Math.min(currentW, currentH);
     new QRCode(tmp, {
-      text: qrUrl, width: qrSize, height: qrSize,
+      text: qrUrl, width: qrMax, height: qrMax,
       colorDark: '#000000', colorLight: '#ffffff',
       correctLevel: QRCode.CorrectLevel.H
     });
@@ -413,58 +434,14 @@ function buildPrintCanvas() {
     setTimeout(() => {
       const img = tmp.querySelector('img') || tmp.querySelector('canvas');
       if (!img) { document.body.removeChild(tmp); reject(new Error('QR не сгенерирован')); return; }
-
-      const drawAndResolve = (src) => {
+      const draw = (src) => {
         document.body.removeChild(tmp);
-        const landscape = currentW > currentH;
-        let qrX, qrY;
-        if (landscape) {
-          qrX = Math.round((currentH - qrSize) / 2);
-          qrY = Math.round((currentH - qrSize) / 2);
-        } else {
-          qrX = Math.round((currentW - qrSize) / 2);
-          qrY = 8;
-        }
-        ctx.drawImage(src, qrX, qrY, qrSize, qrSize);
-
-        ctx.fillStyle = '#000000';
-        ctx.textAlign = landscape ? 'left' : 'center';
-        const tx = landscape ? (qrX + qrSize + 10) : currentW / 2;
-        let ty   = landscape ? 16 : (qrY + qrSize + 8);
-        const maxW = landscape ? (currentW - tx - 6) : currentW - 10;
-        const base = Math.min(currentH, currentW);
-
-        const idSize = Math.round(base * 0.09);
-        ctx.font = `bold ${idSize}px Courier New`;
-        ctx.fillText(id, tx, ty, maxW);
-        ty += Math.round(idSize * 1.3);
-
-        const nameSize = Math.round(base * 0.07);
-        ctx.font = `${nameSize}px Segoe UI`;
-        const words = name.split(' ');
-        let line = '';
-        for (const w of words) {
-          const test = line ? line + ' ' + w : w;
-          if (ctx.measureText(test).width > maxW && line) {
-            ctx.fillText(line, tx, ty, maxW);
-            ty += Math.round(nameSize * 1.25);
-            line = w;
-          } else { line = test; }
-        }
-        if (line) { ctx.fillText(line, tx, ty, maxW); ty += Math.round(nameSize * 1.25); }
-
-        if (sub) {
-          ctx.fillStyle = '#555555';
-          const subSize = Math.round(base * 0.065);
-          ctx.font = `${subSize}px Segoe UI`;
-          ctx.fillText(sub, tx, ty, maxW);
-        }
+        drawLabelOnCanvas(ctx, currentW, currentH, src, id, name, sub);
         resolve(canvas);
       };
-
-      if (img.tagName === 'CANVAS') { drawAndResolve(img); }
-      else if (img.complete) { drawAndResolve(img); }
-      else { img.onload = () => drawAndResolve(img); img.onerror = () => { document.body.removeChild(tmp); reject(new Error('Ошибка QR')); }; }
+      if (img.tagName === 'CANVAS') { draw(img); }
+      else if (img.complete) { draw(img); }
+      else { img.onload = () => draw(img); img.onerror = () => { document.body.removeChild(tmp); reject(new Error('Ошибка QR')); }; }
     }, 300);
   });
 }
