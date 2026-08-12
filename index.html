@@ -355,51 +355,54 @@ function drawLabelOnCanvas(ctx, w, h, qrImg, id, name, sub) {
     const qrY    = PAD;
     ctx.drawImage(qrImg, qrX, qrY, qrSize, qrSize);
 
-    const textX   = qrX + qrSize + PAD;
+    const textX    = qrX + qrSize + PAD;
     const maxTextW = w - textX - PAD;
 
-    const idSize   = Math.round(h * 0.20);
-    const nameSize = Math.round(h * 0.16);
-    const subSize  = Math.round(h * 0.14);
+    const idSize   = Math.round(h * 0.17);
+    const nameSize = Math.round(h * 0.13);
+    const subSize  = Math.round(h * 0.12);
 
-    // Разбиваем наименование на строки
-    ctx.font = `bold ${nameSize}px ${FONT}`;
-    const nameLines = [];
-    let line = '';
-    for (const word of name.split(' ')) {
-      const test = line ? line + ' ' + word : word;
-      if (ctx.measureText(test).width > maxTextW && line) {
-        nameLines.push(line); line = word;
-      } else { line = test; }
-    }
-    if (line) nameLines.push(line);
+    // Разбиваем все строки с учётом maxTextW
+    const splitLines = (text, fontSize) => {
+      ctx.font = `bold ${fontSize}px ${FONT}`;
+      const lines = [];
+      let line = '';
+      for (const word of text.split(' ')) {
+        const test = line ? line + ' ' + word : word;
+        if (ctx.measureText(test).width > maxTextW && line) {
+          lines.push(line); line = word;
+        } else { line = test; }
+      }
+      if (line) lines.push(line);
+      return lines;
+    };
 
-    // Считаем общую высоту текста для вертикального центрирования
-    const lH_id   = Math.round(idSize   * 1.2);
-    const lH_name = Math.round(nameSize * 1.2);
-    const lH_sub  = Math.round(subSize  * 1.2);
-    const totalH  = lH_id
+    const idLines   = splitLines(id,   idSize);
+    const nameLines = splitLines(name, nameSize);
+    const subLines  = sub ? splitLines(sub, subSize) : [];
+
+    // Считаем общую высоту для вертикального центрирования
+    const lH_id   = Math.round(idSize   * 1.25);
+    const lH_name = Math.round(nameSize * 1.25);
+    const lH_sub  = Math.round(subSize  * 1.25);
+    const totalH  = idLines.length   * lH_id
                   + nameLines.length * lH_name
-                  + (sub ? lH_sub + GAP : 0);
+                  + (subLines.length ? GAP + subLines.length * lH_sub : 0);
     let ty = Math.round((h - totalH) / 2) + idSize;
 
     ctx.fillStyle = '#000000';
     ctx.textAlign = 'left';
 
     ctx.font = `bold ${idSize}px ${FONT}`;
-    ctx.fillText(id, textX, ty, maxTextW);
-    ty += lH_id;
+    for (const l of idLines)   { ctx.fillText(l, textX, ty, maxTextW); ty += lH_id; }
 
     ctx.font = `bold ${nameSize}px ${FONT}`;
-    for (const l of nameLines) {
-      ctx.fillText(l, textX, ty, maxTextW);
-      ty += lH_name;
-    }
+    for (const l of nameLines) { ctx.fillText(l, textX, ty, maxTextW); ty += lH_name; }
 
-    if (sub) {
+    if (subLines.length) {
       ty += GAP;
       ctx.font = `bold ${subSize}px ${FONT}`;
-      ctx.fillText(sub, textX, ty, maxTextW);
+      for (const l of subLines) { ctx.fillText(l, textX, ty, maxTextW); ty += lH_sub; }
     }
 
   } else {
