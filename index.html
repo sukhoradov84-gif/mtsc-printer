@@ -339,67 +339,119 @@ window.updatePreview = function() {
 
 // ============================================================
 // ЕДИНАЯ ФУНКЦИЯ ОТРИСОВКИ НАКЛЕЙКИ
-// Работает и для превью и для печати
 // ============================================================
 function drawLabelOnCanvas(ctx, w, h, qrImg, id, name, sub) {
-  const FONT  = 'Courier New, monospace';
-  const PAD   = Math.round(Math.min(w, h) * 0.04);
-  const GAP   = Math.round(Math.min(w, h) * 0.025);
-  const maxW  = w - PAD * 2;
-
-  const idSize   = Math.round(Math.min(w, h) * 0.088);
-  const nameSize = Math.round(Math.min(w, h) * 0.074);
-  const subSize  = Math.round(Math.min(w, h) * 0.065);
-
-  // Разбиваем наименование на строки
-  ctx.font = `bold ${nameSize}px ${FONT}`;
-  const nameLines = [];
-  let line = '';
-  for (const word of name.split(' ')) {
-    const test = line ? line + ' ' + word : word;
-    if (ctx.measureText(test).width > maxW && line) {
-      nameLines.push(line); line = word;
-    } else { line = test; }
-  }
-  if (line) nameLines.push(line);
-
-  // Считаем высоту текстового блока
-  const lineH_id   = Math.round(idSize   * 1.2);
-  const lineH_name = Math.round(nameSize * 1.2);
-  const lineH_sub  = Math.round(subSize  * 1.2);
-  const textH = lineH_id
-              + GAP + nameLines.length * lineH_name
-              + (sub ? GAP + lineH_sub : 0);
-
-  // QR — занимает всё что осталось после отступов и текста
-  const qrAvail = h - PAD * 2 - GAP - textH;
-  const qrSize  = Math.max(Math.min(qrAvail, w - PAD * 2), 32);
-  const qrX     = Math.round((w - qrSize) / 2);
-  const qrY     = PAD;
+  const FONT = 'Courier New, monospace';
+  const PAD  = Math.round(Math.min(w, h) * 0.05);
+  const GAP  = Math.round(Math.min(w, h) * 0.03);
 
   ctx.fillStyle = '#ffffff';
   ctx.fillRect(0, 0, w, h);
-  ctx.drawImage(qrImg, qrX, qrY, qrSize, qrSize);
 
-  // Текст — прямо под QR
-  ctx.fillStyle = '#000000';
-  ctx.textAlign = 'center';
-  let ty = qrY + qrSize + GAP + idSize;
+  if (w > h) {
+    // ── ГОРИЗОНТАЛЬНАЯ ЛЕНТА: QR слева, текст справа ──
+    const qrSize = h - PAD * 2;
+    const qrX    = PAD;
+    const qrY    = PAD;
+    ctx.drawImage(qrImg, qrX, qrY, qrSize, qrSize);
 
-  ctx.font = `bold ${idSize}px ${FONT}`;
-  ctx.fillText(id, w / 2, ty, maxW);
-  ty += lineH_id + GAP;
+    const textX   = qrX + qrSize + PAD;
+    const maxTextW = w - textX - PAD;
 
-  ctx.font = `bold ${nameSize}px ${FONT}`;
-  for (const l of nameLines) {
-    ctx.fillText(l, w / 2, ty, maxW);
-    ty += lineH_name;
-  }
+    const idSize   = Math.round(h * 0.20);
+    const nameSize = Math.round(h * 0.16);
+    const subSize  = Math.round(h * 0.14);
 
-  if (sub) {
-    ty += GAP;
-    ctx.font = `bold ${subSize}px ${FONT}`;
-    ctx.fillText(sub, w / 2, ty, maxW);
+    // Разбиваем наименование на строки
+    ctx.font = `bold ${nameSize}px ${FONT}`;
+    const nameLines = [];
+    let line = '';
+    for (const word of name.split(' ')) {
+      const test = line ? line + ' ' + word : word;
+      if (ctx.measureText(test).width > maxTextW && line) {
+        nameLines.push(line); line = word;
+      } else { line = test; }
+    }
+    if (line) nameLines.push(line);
+
+    // Считаем общую высоту текста для вертикального центрирования
+    const lH_id   = Math.round(idSize   * 1.2);
+    const lH_name = Math.round(nameSize * 1.2);
+    const lH_sub  = Math.round(subSize  * 1.2);
+    const totalH  = lH_id
+                  + nameLines.length * lH_name
+                  + (sub ? lH_sub + GAP : 0);
+    let ty = Math.round((h - totalH) / 2) + idSize;
+
+    ctx.fillStyle = '#000000';
+    ctx.textAlign = 'left';
+
+    ctx.font = `bold ${idSize}px ${FONT}`;
+    ctx.fillText(id, textX, ty, maxTextW);
+    ty += lH_id;
+
+    ctx.font = `bold ${nameSize}px ${FONT}`;
+    for (const l of nameLines) {
+      ctx.fillText(l, textX, ty, maxTextW);
+      ty += lH_name;
+    }
+
+    if (sub) {
+      ty += GAP;
+      ctx.font = `bold ${subSize}px ${FONT}`;
+      ctx.fillText(sub, textX, ty, maxTextW);
+    }
+
+  } else {
+    // ── ВЕРТИКАЛЬНАЯ / КВАДРАТНАЯ: QR сверху, текст снизу ──
+    const idSize   = Math.round(Math.min(w, h) * 0.088);
+    const nameSize = Math.round(Math.min(w, h) * 0.074);
+    const subSize  = Math.round(Math.min(w, h) * 0.065);
+    const maxTextW = w - PAD * 2;
+
+    ctx.font = `bold ${nameSize}px ${FONT}`;
+    const nameLines = [];
+    let line = '';
+    for (const word of name.split(' ')) {
+      const test = line ? line + ' ' + word : word;
+      if (ctx.measureText(test).width > maxTextW && line) {
+        nameLines.push(line); line = word;
+      } else { line = test; }
+    }
+    if (line) nameLines.push(line);
+
+    const lH_id   = Math.round(idSize   * 1.2);
+    const lH_name = Math.round(nameSize * 1.2);
+    const lH_sub  = Math.round(subSize  * 1.2);
+    const textH   = lH_id
+                  + GAP + nameLines.length * lH_name
+                  + (sub ? GAP + lH_sub : 0);
+
+    const qrAvail = h - PAD * 2 - GAP - textH;
+    const qrSize  = Math.max(Math.min(qrAvail, w - PAD * 2), 32);
+    const qrX     = Math.round((w - qrSize) / 2);
+    const qrY     = PAD;
+    ctx.drawImage(qrImg, qrX, qrY, qrSize, qrSize);
+
+    let ty = qrY + qrSize + GAP + idSize;
+    ctx.fillStyle = '#000000';
+    ctx.textAlign = 'center';
+
+    ctx.font = `bold ${idSize}px ${FONT}`;
+    ctx.fillText(id, w / 2, ty, maxTextW);
+    ty += lH_id + GAP;
+
+    ctx.font = `bold ${nameSize}px ${FONT}`;
+    for (const l of nameLines) {
+      ctx.fillText(l, w / 2, ty, maxTextW);
+      ty += lH_name;
+    }
+
+    if (sub) {
+      ty += GAP;
+      ctx.font = `bold ${subSize}px ${FONT}`;
+      ctx.fillText(sub, w / 2, ty, maxTextW);
+    }
   }
 }
 
