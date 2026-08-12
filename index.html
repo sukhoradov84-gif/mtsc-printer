@@ -25,76 +25,39 @@
     }
     h1 { font-size: 18px; font-weight: 700; text-transform: uppercase;
          letter-spacing: 0.5px; margin-bottom: 16px; text-align: center; }
-
-    /* Тип наклейки */
     .type-tabs { display: flex; gap: 0; margin-bottom: 16px; border: 1px solid #D9E0EA; border-radius: 3px; overflow: hidden; }
     .type-tab {
       flex: 1; padding: 9px 4px; border: none; background: #F5F7FC;
       font-size: 12px; font-weight: 700; cursor: pointer; text-align: center;
       text-transform: uppercase; letter-spacing: 0.3px; color: #6B7686;
-      border-right: 1px solid #D9E0EA; transition: background 0.15s;
+      border-right: 1px solid #D9E0EA;
     }
     .type-tab:last-child { border-right: none; }
     .type-tab.active { background: #16233F; color: #fff; }
-
-    /* Поля данных */
     .fields { margin-bottom: 14px; display: flex; flex-direction: column; gap: 8px; }
-    .field label {
-      display: block; font-size: 11px; font-weight: 700; text-transform: uppercase;
-      letter-spacing: 0.3px; color: #6B7686; margin-bottom: 3px;
-    }
-    .field input {
-      width: 100%; padding: 8px 10px; border: 1px solid #D9E0EA;
-      border-radius: 3px; font-size: 13px; font-family: inherit;
-    }
+    .field label { display: block; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.3px; color: #6B7686; margin-bottom: 3px; }
+    .field input { width: 100%; padding: 8px 10px; border: 1px solid #D9E0EA; border-radius: 3px; font-size: 13px; font-family: inherit; }
     .field input:focus { outline: none; border-color: #16233F; }
-
-    /* Предпросмотр наклейки */
-    .preview-wrap {
-      border: 1px solid #D9E0EA; border-radius: 3px; background: #fff;
-      margin-bottom: 14px; display: flex; align-items: center;
-      justify-content: center; overflow: hidden; min-height: 120px;
-    }
+    .preview-wrap { border: 1px solid #D9E0EA; border-radius: 3px; background: #fff; margin-bottom: 14px; display: flex; align-items: center; justify-content: center; overflow: hidden; min-height: 120px; padding: 8px; }
     #labelPreviewCanvas { display: block; }
-
-    /* Размер ленты */
     .tape-section { margin-bottom: 14px; }
-    .tape-section label {
-      display: block; font-size: 11px; font-weight: 700; text-transform: uppercase;
-      letter-spacing: 0.3px; color: #6B7686; margin-bottom: 6px;
-    }
+    .tape-section label { display: block; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.3px; color: #6B7686; margin-bottom: 6px; }
     .tape-grid { display: flex; flex-wrap: wrap; gap: 6px; }
-    .tape-btn {
-      padding: 5px 10px; border: 1px solid #D9E0EA; border-radius: 3px;
-      background: #F5F7FC; font-size: 12px; font-weight: 600; cursor: pointer;
-      font-family: 'Courier New', monospace; color: #16233F;
-    }
+    .tape-btn { padding: 5px 10px; border: 1px solid #D9E0EA; border-radius: 3px; background: #F5F7FC; font-size: 12px; font-weight: 600; cursor: pointer; font-family: 'Courier New', monospace; color: #16233F; }
     .tape-btn.active { background: #16233F; color: #fff; border-color: #16233F; }
     .tape-custom { display: flex; gap: 6px; margin-top: 6px; }
-    .tape-custom input {
-      flex: 1; padding: 5px 8px; border: 1px solid #D9E0EA;
-      border-radius: 3px; font-size: 12px; text-align: center;
-    }
-
-    /* Кнопки */
-    .btn {
-      display: block; width: 100%; padding: 11px; border: none; border-radius: 3px;
-      font-size: 13px; font-weight: 700; letter-spacing: 0.3px; cursor: pointer;
-      margin-bottom: 8px; text-transform: uppercase; font-family: inherit;
-    }
+    .tape-custom input { flex: 1; padding: 5px 8px; border: 1px solid #D9E0EA; border-radius: 3px; font-size: 12px; text-align: center; }
+    .btn { display: block; width: 100%; padding: 11px; border: none; border-radius: 3px; font-size: 13px; font-weight: 700; letter-spacing: 0.3px; cursor: pointer; margin-bottom: 8px; text-transform: uppercase; font-family: inherit; }
     .btn-primary { background: #16233F; color: #fff; }
     .btn-primary:hover { background: #223259; }
     .btn-primary:disabled { background: #B7BFC8; cursor: default; }
     .btn-teal { background: #1F7A5C; color: #fff; }
     .btn-teal:hover { background: #185f47; }
     .btn-secondary { background: #EEF1F6; color: #16233F; border: 1px solid #D9E0EA; }
-    .btn-secondary:hover { border-color: #16233F; }
-
     .status { margin-top: 8px; font-size: 12.5px; min-height: 18px; color: #6B7686; text-align: center; }
-    .status.ok  { color: #1F7A5C; }
+    .status.ok { color: #1F7A5C; }
     .status.err { color: #C43E1D; }
-    .status.info{ color: #2B5FA8; }
-
+    .status.info { color: #2B5FA8; }
     .tear-line { border-bottom: 2px dashed #C7CFDC; margin: 14px 0; }
     #libStatus { font-size: 11px; color: #6B7686; margin-bottom: 8px; text-align: center; min-height: 14px; }
     .hint { font-size: 11px; color: #6B7686; line-height: 1.5; text-align: center; }
@@ -104,25 +67,15 @@
 <div class="card">
   <div class="eyebrow">МТСК · Складской модуль</div>
   <h1>🖨️ Печать наклейки</h1>
-
-  <!-- Тип наклейки -->
   <div class="type-tabs">
-    <button class="type-tab active" id="tab-rem" onclick="setType('rem')">🔧 Ремонт</button>
-    <button class="type-tab" id="tab-part" onclick="setType('part')">📦 Запчасть</button>
-    <button class="type-tab" id="tab-order" onclick="setType('order')">🛒 Заказ</button>
+    <button class="type-tab active" id="tab-rem"   onclick="setType('rem')">🔧 Ремонт</button>
+    <button class="type-tab"        id="tab-part"  onclick="setType('part')">📦 Запчасть</button>
+    <button class="type-tab"        id="tab-order" onclick="setType('order')">🛒 Заказ</button>
   </div>
-
-  <!-- Поля -->
   <div class="fields" id="fieldsBlock"></div>
-
-  <!-- Предпросмотр -->
-  <div class="preview-wrap" id="previewWrap">
-    <canvas id="labelPreviewCanvas"></canvas>
-  </div>
-
-  <!-- Размер ленты -->
+  <div class="preview-wrap"><canvas id="labelPreviewCanvas"></canvas></div>
   <div class="tape-section">
-    <label>Размер ленты (мм × мм → px)</label>
+    <label>Размер ленты</label>
     <div class="tape-grid" id="tapeGrid"></div>
     <div class="tape-custom">
       <input type="number" id="customW" placeholder="Ш px" min="48" max="576">
@@ -130,32 +83,23 @@
       <button class="tape-btn" onclick="applyCustomSize()">✓</button>
     </div>
   </div>
-
   <div class="tear-line"></div>
-
   <div id="libStatus">Загрузка библиотеки принтера...</div>
   <button class="btn btn-primary" id="connectBtn" onclick="connectPrinter()" disabled>🔵 Подключить B1</button>
   <button class="btn btn-teal"    id="printBtn"   onclick="printLabel()"    disabled>🖨️ Напечатать</button>
   <button class="btn btn-secondary"               onclick="updatePreview()">🔄 Обновить превью</button>
   <div class="status" id="status">Инициализация...</div>
-
   <div class="tear-line"></div>
-  <div class="hint">
-    Работает только в <strong>Chrome</strong> на ПК или Android.<br>
-    Bluetooth должен быть включён. Принтер — в зоне видимости.
-  </div>
+  <div class="hint">Работает только в <strong>Chrome</strong> на ПК или Android.<br>Bluetooth должен быть включён.</div>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script type="module">
 
-// ============================================================
-// КОНСТАНТЫ
-// ============================================================
-const ENGINEER_APP_URL   = 'https://script.google.com/macros/s/AKfycbwipZLCMyByQDkVqs_j_LOuTcd8xGTr6OMGi3DgOsU8d6rFAXWZFRGmJskU2Q4AdjNr/exec';
-const WAREHOUSE_APP_URL  = 'https://script.google.com/macros/s/WAREHOUSE_DEPLOY_ID/exec'; // заменить при деплое
+const ENGINEER_APP_URL  = 'https://script.google.com/macros/s/AKfycbwipZLCMyByQDkVqs_j_LOuTcd8xGTr6OMGi3DgOsU8d6rFAXWZFRGmJskU2Q4AdjNr/exec';
+const WAREHOUSE_APP_URL = 'https://script.google.com/macros/s/WAREHOUSE_DEPLOY_ID/exec';
 
-// Размерная сетка Niimbot B1: [ширина мм, высота мм, ширина px, высота px]
+// Размерная сетка: [label, px_width, px_height]
 const TAPE_SIZES = [
   { label: '40×40', w: 320, h: 320 },
   { label: '40×30', w: 320, h: 240 },
@@ -164,37 +108,30 @@ const TAPE_SIZES = [
   { label: '60×40', w: 480, h: 320 },
 ];
 
-// Схема полей для каждого типа наклейки
 const TYPE_FIELDS = {
-  rem: [
+  rem:   [
     { id: 'f_id',   label: 'ID ремонта',   placeholder: 'REM-0001' },
     { id: 'f_name', label: 'Наименование', placeholder: 'Дефибриллятор ДКИ-Н-10' },
-    { id: 'f_lpu',  label: 'ЛПУ',          placeholder: 'ГП 78' },
+    { id: 'f_lpu',  label: 'ЛПУ',          placeholder: 'ГП78' },
   ],
-  part: [
+  part:  [
     { id: 'f_id',      label: 'ID запчасти',  placeholder: 'PART-0001' },
     { id: 'f_name',    label: 'Наименование', placeholder: 'Аккумулятор Delta 12V' },
     { id: 'f_article', label: 'Артикул',      placeholder: 'DTM12022' },
   ],
   order: [
-    { id: 'f_id',   label: 'ID заказа',    placeholder: 'ORD-00041' },
-    { id: 'f_name', label: 'Описание',     placeholder: 'Кабель ЭКГ Nihon Kohden' },
+    { id: 'f_id',   label: 'ID заказа', placeholder: 'ORD-00041' },
+    { id: 'f_name', label: 'Описание',  placeholder: 'Кабель ЭКГ Nihon Kohden' },
   ],
 };
 
-// ============================================================
-// СОСТОЯНИЕ
-// ============================================================
-let currentType   = 'rem';
-let currentW      = 320;
-let currentH      = 320;
-let client        = null;
+let currentType = 'rem';
+let currentW    = 320;
+let currentH    = 320;
+let client      = null;
 let NiimbotBluetoothClient = null;
 let ImageEncoder           = null;
 
-// ============================================================
-// УТИЛИТЫ
-// ============================================================
 function setStatus(msg, cls) {
   const el = document.getElementById('status');
   el.textContent = msg;
@@ -215,9 +152,6 @@ function buildQrUrl() {
   return '';
 }
 
-// ============================================================
-// ТИПЫ — рендер полей
-// ============================================================
 window.setType = function(type) {
   currentType = type;
   document.querySelectorAll('.type-tab').forEach(b => b.classList.toggle('active', b.id === 'tab-' + type));
@@ -226,43 +160,23 @@ window.setType = function(type) {
 };
 
 function renderFields() {
-  const block = document.getElementById('fieldsBlock');
+  const block  = document.getElementById('fieldsBlock');
   const fields = TYPE_FIELDS[currentType] || [];
   block.innerHTML = fields.map(f =>
-    `<div class="field">
-      <label>${f.label}</label>
-      <input type="text" id="${f.id}" placeholder="${f.placeholder}" oninput="updatePreview()">
-    </div>`
+    `<div class="field"><label>${f.label}</label><input type="text" id="${f.id}" placeholder="${f.placeholder}" oninput="updatePreview()"></div>`
   ).join('');
-  // Если URL передал параметры — подставляем
   const params = new URLSearchParams(window.location.search);
-  if (currentType === 'rem' && params.get('repairId')) {
-    const el = document.getElementById('f_id');
-    if (el) el.value = params.get('repairId');
-  }
-  if (currentType === 'part' && params.get('partId')) {
-    const el = document.getElementById('f_id');
-    if (el) el.value = params.get('partId');
-  }
-  if (currentType === 'order' && params.get('orderId')) {
-    const el = document.getElementById('f_id');
-    if (el) el.value = params.get('orderId');
-  }
-  // доп поля из URL
-  const nameEl = document.getElementById('f_name');
-  if (nameEl && params.get('name')) nameEl.value = params.get('name');
-  const lpuEl  = document.getElementById('f_lpu');
-  if (lpuEl  && params.get('lpu'))  lpuEl.value  = params.get('lpu');
-  const artEl  = document.getElementById('f_article');
-  if (artEl  && params.get('article')) artEl.value = params.get('article');
+  const map = { rem: 'repairId', part: 'partId', order: 'orderId' };
+  const idParam = params.get(map[currentType]);
+  if (idParam) { const el = document.getElementById('f_id'); if (el) el.value = idParam; }
+  ['name','lpu','article'].forEach(k => {
+    const v = params.get(k);
+    if (v) { const el = document.getElementById('f_' + k); if (el) el.value = v; }
+  });
 }
 
-// ============================================================
-// РАЗМЕР ЛЕНТЫ
-// ============================================================
 function renderTapeGrid() {
-  const grid = document.getElementById('tapeGrid');
-  grid.innerHTML = TAPE_SIZES.map((s, i) =>
+  document.getElementById('tapeGrid').innerHTML = TAPE_SIZES.map((s, i) =>
     `<button class="tape-btn${i === 0 ? ' active' : ''}" onclick="selectTape(${i})" id="tape-${i}">${s.label}</button>`
   ).join('');
 }
@@ -285,236 +199,217 @@ window.applyCustomSize = function() {
 };
 
 // ============================================================
-// ПРЕВЬЮ НАКЛЕЙКИ
+// КЛЮЧЕВАЯ ФУНКЦИЯ: строит canvas наклейки нужного размера
+// QR генерируется ТОЧНО в нужный размер — без масштабирования drawImage
 // ============================================================
-window.updatePreview = function() {
-  const canvas  = document.getElementById('labelPreviewCanvas');
-  const qrUrl   = buildQrUrl();
-  const id      = getFieldVal('f_id');
-  const name    = getFieldVal('f_name');
-  const sub     = currentType === 'rem'  ? getFieldVal('f_lpu') :
-                  currentType === 'part' ? getFieldVal('f_article') : '';
-
-  // Масштаб для превью — не больше 300px по большей стороне
-  const scale   = Math.min(300 / currentW, 300 / currentH, 1);
-  const pw = Math.round(currentW * scale);
-  const ph = Math.round(currentH * scale);
-  canvas.width  = pw;
-  canvas.height = ph;
-  const ctx = canvas.getContext('2d');
-  ctx.fillStyle = '#ffffff';
-  ctx.fillRect(0, 0, pw, ph);
-
-  if (!id || !qrUrl) {
-    ctx.fillStyle = '#D9E0EA';
-    ctx.font = '12px Segoe UI';
-    ctx.textAlign = 'center';
-    ctx.fillText('Заполните поля', pw / 2, ph / 2);
-    return;
-  }
-
-  // Генерируем QR во временный div
-  const tmp = document.createElement('div');
-  tmp.style.cssText = 'position:absolute;left:-9999px;top:-9999px;';
-  document.body.appendChild(tmp);
-  const qrMax = Math.min(pw, ph);
-  new QRCode(tmp, {
-    text: qrUrl, width: qrMax, height: qrMax,
-    colorDark: '#000000', colorLight: '#ffffff',
-    correctLevel: QRCode.CorrectLevel.H
-  });
-
-  setTimeout(() => {
-    const img = tmp.querySelector('img') || tmp.querySelector('canvas');
-    const drawQr = (src) => {
-      document.body.removeChild(tmp);
-      drawLabelOnCanvas(ctx, pw, ph, src, id, name, sub);
-    };
-    if (!img) { document.body.removeChild(tmp); return; }
-    if (img.tagName === 'CANVAS') { drawQr(img); }
-    else if (img.complete) { drawQr(img); }
-    else { img.onload = () => drawQr(img); }
-  }, 250);
-};
-
-// ============================================================
-// ЕДИНАЯ ФУНКЦИЯ ОТРИСОВКИ НАКЛЕЙКИ
-// ============================================================
-function drawLabelOnCanvas(ctx, w, h, qrImg, id, name, sub) {
-  const FONT = 'Courier New, monospace';
-  const PAD  = Math.round(Math.min(w, h) * 0.05);
-  const GAP  = Math.round(Math.min(w, h) * 0.03);
-
-  ctx.fillStyle = '#ffffff';
-  ctx.fillRect(0, 0, w, h);
-
-  if (w > h) {
-    // ── ГОРИЗОНТАЛЬНАЯ ЛЕНТА: QR слева, текст справа ──
-    const qrSize = h - PAD;
-    const qrX    = 0;
-    const qrY    = Math.round((h - qrSize) / 2);
-    ctx.drawImage(qrImg, qrX, qrY, qrSize, qrSize);
-
-    const textX    = qrSize + PAD;
-    const maxTextW = w - textX - PAD;
-
-    // Разбиваем текст на строки с учётом maxTextW при заданном размере шрифта
-    const splitToLines = (text, size) => {
-      ctx.font = `bold ${size}px ${FONT}`;
-      const lines = [];
-      let line = '';
-      for (const word of text.split(' ')) {
-        const test = line ? line + ' ' + word : word;
-        if (ctx.measureText(test).width > maxTextW && line) {
-          lines.push(line); line = word;
-        } else { line = test; }
-      }
-      if (line) lines.push(line);
-      return lines;
-    };
-
-    // Подбираем размер шрифта — уменьшаем пока каждая строка не влезет
-    const fitSize = (text, maxSize) => {
-      let size = maxSize;
-      while (size > 8) {
-        const lines = splitToLines(text, size);
-        ctx.font = `bold ${size}px ${FONT}`;
-        if (lines.every(l => ctx.measureText(l).width <= maxTextW)) return size;
-        size -= 1;
-      }
-      return size;
-    };
-
-    const nameSize0 = Math.round(h * 0.14);
-    const nameSize  = fitSize(name, nameSize0);
-    const nameLines = splitToLines(name, nameSize);
-
-    const idSize    = fitSize(id, Math.round(h * 0.17));
-    const subSize   = Math.round(nameSize * 0.9);
-    const subLines  = sub ? splitToLines(sub, subSize) : [];
-
-    const lH_id   = Math.round(idSize   * 1.3);
-    const lH_name = Math.round(nameSize * 1.3);
-    const lH_sub  = Math.round(subSize  * 1.3);
-    const totalH  = lH_id
-                  + nameLines.length * lH_name
-                  + (subLines.length ? GAP + subLines.length * lH_sub : 0);
-    let ty = Math.round((h - totalH) / 2) + idSize;
-
-    ctx.fillStyle = '#000000';
-    ctx.textAlign = 'left';
-
-    ctx.font = `bold ${idSize}px ${FONT}`;
-    ctx.fillText(id, textX, ty);
-    ty += lH_id;
-
-    ctx.font = `bold ${nameSize}px ${FONT}`;
-    for (const l of nameLines) { ctx.fillText(l, textX, ty); ty += lH_name; }
-
-    if (subLines.length) {
-      ty += GAP;
-      ctx.font = `bold ${subSize}px ${FONT}`;
-      for (const l of subLines) { ctx.fillText(l, textX, ty); ty += lH_sub; }
-    }
-
-  } else {
-    // ── ВЕРТИКАЛЬНАЯ / КВАДРАТНАЯ: QR сверху, текст снизу ──
-    const idSize   = Math.round(Math.min(w, h) * 0.088);
-    const nameSize = Math.round(Math.min(w, h) * 0.074);
-    const subSize  = Math.round(Math.min(w, h) * 0.065);
-    const maxTextW = w - PAD * 2;
-
-    ctx.font = `bold ${nameSize}px ${FONT}`;
-    const nameLines = [];
-    let line = '';
-    for (const word of name.split(' ')) {
-      const test = line ? line + ' ' + word : word;
-      if (ctx.measureText(test).width > maxTextW && line) {
-        nameLines.push(line); line = word;
-      } else { line = test; }
-    }
-    if (line) nameLines.push(line);
-
-    const lH_id   = Math.round(idSize   * 1.2);
-    const lH_name = Math.round(nameSize * 1.2);
-    const lH_sub  = Math.round(subSize  * 1.2);
-    const textH   = lH_id
-                  + GAP + nameLines.length * lH_name
-                  + (sub ? GAP + lH_sub : 0);
-
-    const qrAvail = h - PAD * 2 - GAP - textH;
-    const qrSize  = Math.max(Math.min(qrAvail, w - PAD * 2), 32);
-    const qrX     = Math.round((w - qrSize) / 2);
-    const qrY     = PAD;
-    ctx.drawImage(qrImg, qrX, qrY, qrSize, qrSize);
-
-    let ty = qrY + qrSize + GAP + idSize;
-    ctx.fillStyle = '#000000';
-    ctx.textAlign = 'center';
-
-    ctx.font = `bold ${idSize}px ${FONT}`;
-    ctx.fillText(id, w / 2, ty, maxTextW);
-    ty += lH_id + GAP;
-
-    ctx.font = `bold ${nameSize}px ${FONT}`;
-    for (const l of nameLines) {
-      ctx.fillText(l, w / 2, ty, maxTextW);
-      ty += lH_name;
-    }
-
-    if (sub) {
-      ty += GAP;
-      ctx.font = `bold ${subSize}px ${FONT}`;
-      ctx.fillText(sub, w / 2, ty, maxTextW);
-    }
-  }
-}
-
-// ============================================================
-// ПЕЧАТЬ — canvas для принтера (полный размер)
-// ============================================================
-function buildPrintCanvas() {
+function buildLabelCanvas(w, h) {
   return new Promise((resolve, reject) => {
     const qrUrl = buildQrUrl();
     const id    = getFieldVal('f_id');
     const name  = getFieldVal('f_name');
     const sub   = currentType === 'rem'  ? getFieldVal('f_lpu') :
                   currentType === 'part' ? getFieldVal('f_article') : '';
+
     if (!qrUrl || !id) { reject(new Error('Заполните поля')); return; }
 
-    const canvas = document.createElement('canvas');
-    canvas.width  = currentW;
-    canvas.height = currentH;
-    const ctx = canvas.getContext('2d');
+    const FONT = 'bold %PX%px Courier New, monospace';
+    const PAD  = Math.round(Math.min(w, h) * 0.04);
+    const GAP  = Math.round(Math.min(w, h) * 0.025);
 
+    // Вычисляем размер QR и текстовой зоны ДО генерации QR
+    let qrSize, qrX, qrY, textX, textY, maxTextW, landscape;
+    landscape = w > h;
+
+    if (landscape) {
+      // Горизонтальная лента: QR слева, текст справа
+      // QR = высота ленты минус отступ сверху и снизу
+      qrSize   = h - PAD * 2;
+      qrX      = PAD;
+      qrY      = PAD;
+      textX    = PAD + qrSize + PAD;
+      maxTextW = w - textX - PAD;
+    } else {
+      // Вертикальная / квадратная: считаем сколько места займёт текст
+      // чтобы QR мог занять остаток
+      const tmpCanvas = document.createElement('canvas');
+      const tmpCtx    = tmpCanvas.getContext('2d');
+      const nameSize0 = Math.round(Math.min(w,h) * 0.08);
+      tmpCtx.font = `bold ${nameSize0}px Courier New, monospace`;
+      maxTextW = w - PAD * 2;
+      const nameLines = wrapText(tmpCtx, name, maxTextW, nameSize0);
+      const idSz   = Math.round(Math.min(w,h) * 0.09);
+      const subSz  = Math.round(Math.min(w,h) * 0.07);
+      const textH  = Math.round(idSz * 1.3)
+                   + GAP + nameLines.length * Math.round(nameSize0 * 1.3)
+                   + (sub ? GAP + Math.round(subSz * 1.3) : 0);
+      qrSize = Math.max(h - PAD * 2 - GAP - textH, 32);
+      qrX    = Math.round((w - qrSize) / 2);
+      qrY    = PAD;
+      textX  = w / 2;
+    }
+
+    // Генерируем QR ТОЧНО в нужный размер
     const tmp = document.createElement('div');
     tmp.style.cssText = 'position:absolute;left:-9999px;top:-9999px;';
     document.body.appendChild(tmp);
-    // QR генерируем максимальным — drawLabelOnCanvas сам посчитает нужный размер
-    const qrMax = Math.min(currentW, currentH);
     new QRCode(tmp, {
-      text: qrUrl, width: qrMax, height: qrMax,
+      text: qrUrl,
+      width: qrSize, height: qrSize,
       colorDark: '#000000', colorLight: '#ffffff',
       correctLevel: QRCode.CorrectLevel.H
     });
 
     setTimeout(() => {
-      const img = tmp.querySelector('img') || tmp.querySelector('canvas');
-      if (!img) { document.body.removeChild(tmp); reject(new Error('QR не сгенерирован')); return; }
-      const draw = (src) => {
+      const qrEl = tmp.querySelector('canvas') || tmp.querySelector('img');
+      if (!qrEl) { document.body.removeChild(tmp); reject(new Error('QR не сгенерирован')); return; }
+
+      const draw = (qrSrc) => {
         document.body.removeChild(tmp);
-        drawLabelOnCanvas(ctx, currentW, currentH, src, id, name, sub);
+        const canvas = document.createElement('canvas');
+        canvas.width  = w;
+        canvas.height = h;
+        const ctx = canvas.getContext('2d');
+
+        // Фон
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(0, 0, w, h);
+
+        // QR — рисуем 1:1, без масштабирования
+        ctx.drawImage(qrSrc, qrX, qrY, qrSize, qrSize);
+
+        // Текст
+        ctx.fillStyle = '#000000';
+
+        if (landscape) {
+          // Горизонталь: текст справа, выровнен по левому краю текстовой зоны
+          const idSz   = fitFontSize(ctx, id,   maxTextW, Math.round(h * 0.18));
+          const nameSz = fitFontSize(ctx, name, maxTextW, Math.round(h * 0.15));
+          const subSz  = sub ? fitFontSize(ctx, sub, maxTextW, Math.round(nameSz * 0.9)) : 0;
+
+          const nameLines = wrapText(ctx, name, maxTextW, nameSz);
+          const subLines  = sub ? wrapText(ctx, sub, maxTextW, subSz) : [];
+
+          const lH_id   = Math.round(idSz   * 1.3);
+          const lH_name = Math.round(nameSz  * 1.3);
+          const lH_sub  = Math.round(subSz   * 1.3);
+          const totalH  = lH_id
+                        + nameLines.length * lH_name
+                        + (subLines.length ? GAP + subLines.length * lH_sub : 0);
+
+          let ty = Math.round((h - totalH) / 2) + idSz;
+          ctx.textAlign = 'left';
+
+          ctx.font = `bold ${idSz}px Courier New, monospace`;
+          ctx.fillText(id, textX, ty);
+          ty += lH_id;
+
+          ctx.font = `bold ${nameSz}px Courier New, monospace`;
+          for (const l of nameLines) { ctx.fillText(l, textX, ty); ty += lH_name; }
+
+          if (subLines.length) {
+            ty += GAP;
+            ctx.font = `bold ${subSz}px Courier New, monospace`;
+            for (const l of subLines) { ctx.fillText(l, textX, ty); ty += lH_sub; }
+          }
+
+        } else {
+          // Вертикаль: текст под QR, центрирован
+          const idSz    = Math.round(Math.min(w,h) * 0.09);
+          const nameSz  = Math.round(Math.min(w,h) * 0.08);
+          const subSz   = Math.round(Math.min(w,h) * 0.07);
+          const nameLines = wrapText(ctx, name, w - PAD * 2, nameSz);
+          const subLines  = sub ? wrapText(ctx, sub, w - PAD * 2, subSz) : [];
+
+          let ty = qrY + qrSize + GAP + idSz;
+          ctx.textAlign = 'center';
+
+          ctx.font = `bold ${idSz}px Courier New, monospace`;
+          ctx.fillText(id, w / 2, ty);
+          ty += Math.round(idSz * 1.3) + GAP;
+
+          ctx.font = `bold ${nameSz}px Courier New, monospace`;
+          for (const l of nameLines) { ctx.fillText(l, w / 2, ty); ty += Math.round(nameSz * 1.3); }
+
+          if (subLines.length) {
+            ty += GAP;
+            ctx.font = `bold ${subSz}px Courier New, monospace`;
+            for (const l of subLines) { ctx.fillText(l, w / 2, ty); ty += Math.round(subSz * 1.3); }
+          }
+        }
+
         resolve(canvas);
       };
-      if (img.tagName === 'CANVAS') { draw(img); }
-      else if (img.complete) { draw(img); }
-      else { img.onload = () => draw(img); img.onerror = () => { document.body.removeChild(tmp); reject(new Error('Ошибка QR')); }; }
+
+      if (qrEl.tagName === 'CANVAS') { draw(qrEl); }
+      else if (qrEl.complete)        { draw(qrEl); }
+      else { qrEl.onload = () => draw(qrEl); qrEl.onerror = () => { document.body.removeChild(tmp); reject(new Error('Ошибка QR')); }; }
     }, 300);
   });
 }
 
+// Перенос текста на строки
+function wrapText(ctx, text, maxW, size) {
+  ctx.font = `bold ${size}px Courier New, monospace`;
+  const lines = [];
+  let line = '';
+  for (const word of text.split(' ')) {
+    const test = line ? line + ' ' + word : word;
+    if (ctx.measureText(test).width > maxW && line) {
+      lines.push(line); line = word;
+    } else { line = test; }
+  }
+  if (line) lines.push(line);
+  return lines;
+}
+
+// Подбор размера шрифта — уменьшаем пока текст (с переносами) не влезет
+function fitFontSize(ctx, text, maxW, maxSize) {
+  let size = maxSize;
+  while (size > 8) {
+    const lines = wrapText(ctx, text, maxW, size);
+    if (lines.every(l => { ctx.font = `bold ${size}px Courier New, monospace`; return ctx.measureText(l).width <= maxW; })) return size;
+    size -= 1;
+  }
+  return size;
+}
+
 // ============================================================
-// BLUETOOTH — подключение и печать
+// ПРЕВЬЮ
+// ============================================================
+window.updatePreview = async function() {
+  const canvas  = document.getElementById('labelPreviewCanvas');
+  const id      = getFieldVal('f_id');
+  const qrUrl   = buildQrUrl();
+
+  if (!id || !qrUrl) {
+    const scale = Math.min(300 / currentW, 300 / currentH, 1);
+    canvas.width  = Math.round(currentW * scale);
+    canvas.height = Math.round(currentH * scale);
+    const ctx = canvas.getContext('2d');
+    ctx.fillStyle = '#F0F3F8';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = '#B7BFC8';
+    ctx.font = '13px Segoe UI';
+    ctx.textAlign = 'center';
+    ctx.fillText('Заполните поля', canvas.width / 2, canvas.height / 2);
+    return;
+  }
+
+  try {
+    // Строим в полном размере, потом масштабируем для отображения
+    const fullCanvas = await buildLabelCanvas(currentW, currentH);
+    const scale = Math.min(300 / currentW, 300 / currentH, 1);
+    canvas.width  = Math.round(currentW * scale);
+    canvas.height = Math.round(currentH * scale);
+    const ctx = canvas.getContext('2d');
+    ctx.drawImage(fullCanvas, 0, 0, canvas.width, canvas.height);
+  } catch(e) {
+    console.warn('Превью:', e.message);
+  }
+};
+
+// ============================================================
+// BLUETOOTH
 // ============================================================
 async function loadLib() {
   try {
@@ -538,7 +433,7 @@ async function loadLib() {
 
 window.connectPrinter = async function() {
   if (!NiimbotBluetoothClient) { setStatus('Библиотека не загружена', 'err'); return; }
-  if (!navigator.bluetooth) { setStatus('Web Bluetooth не поддерживается — используйте Chrome', 'err'); return; }
+  if (!navigator.bluetooth)    { setStatus('Web Bluetooth не поддерживается — используйте Chrome', 'err'); return; }
   const btn = document.getElementById('connectBtn');
   btn.disabled = true; btn.textContent = '⏳ Подключение...';
   setStatus('Выберите принтер в диалоге браузера...', 'info');
@@ -579,13 +474,11 @@ window.printLabel = async function() {
   btn.disabled = true; btn.textContent = '⏳ Печать...';
   setStatus('Подготовка изображения...', 'info');
   try {
-    const canvas = await buildPrintCanvas();
+    const canvas = await buildLabelCanvas(currentW, currentH);
     setStatus('Отправка на принтер...', 'info');
     const printTaskType = client.getPrintTaskType();
-    if (!printTaskType) throw new Error('Не удалось определить тип задачи для этой модели');
-    const printTask = client.abstraction.newPrintTask(printTaskType, {
-      quantity: 1, labelType: 1, density: 3, totalPages: 1,
-    });
+    if (!printTaskType) throw new Error('Не удалось определить тип задачи');
+    const printTask = client.abstraction.newPrintTask(printTaskType, { quantity: 1, labelType: 1, density: 3, totalPages: 1 });
     const encodedImage = ImageEncoder.encodeCanvas(canvas, 'top');
     await printTask.printInit();
     await printTask.printPage(encodedImage);
@@ -604,16 +497,13 @@ window.printLabel = async function() {
 // ============================================================
 window.addEventListener('load', function() {
   renderTapeGrid();
-  // Определяем тип из URL-параметров
   const params = new URLSearchParams(window.location.search);
-  if (params.get('repairId'))  currentType = 'rem';
-  else if (params.get('partId'))  currentType = 'part';
-  else if (params.get('orderId')) currentType = 'order';
-
+  if      (params.get('repairId')) currentType = 'rem';
+  else if (params.get('partId'))   currentType = 'part';
+  else if (params.get('orderId'))  currentType = 'order';
   document.querySelectorAll('.type-tab').forEach(b => b.classList.toggle('active', b.id === 'tab-' + currentType));
   renderFields();
   updatePreview();
-
   loadLib().catch(e => {
     document.getElementById('libStatus').textContent = '❌ ' + e.message;
     setStatus('Ошибка загрузки библиотеки', 'err');
