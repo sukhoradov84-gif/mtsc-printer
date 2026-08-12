@@ -3,32 +3,41 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>МТСК · Заказ запчасти</title>
+  <title>МТСК · QR-код</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       background: #EEF1F6; color: #16233F;
-      min-height: 100vh;
-      display: flex; align-items: center; justify-content: center;
-      padding: 24px 16px;
+      min-height: 100vh; display: flex; align-items: center;
+      justify-content: center; padding: 24px 16px;
     }
     .card {
       background: #fff; border-radius: 4px;
       box-shadow: 0 4px 20px rgba(22,35,63,0.12);
       padding: 28px 24px; width: 100%; max-width: 400px;
-      border-top: 4px solid #C43E1D; text-align: center;
+      text-align: center;
     }
     .eyebrow {
       font-family: 'Courier New', monospace; font-size: 10px;
       letter-spacing: 2px; color: #6B7686; text-transform: uppercase; margin-bottom: 4px;
     }
-    .order-id {
-      font-family: 'Courier New', monospace; font-size: 22px;
-      font-weight: 700; margin-bottom: 8px;
+    .badge {
+      display: inline-block; padding: 3px 12px; border-radius: 10px;
+      font-size: 11px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.3px; margin-bottom: 12px;
     }
-    .sub { font-size: 13px; color: #6B7686; margin-bottom: 24px; line-height: 1.5; }
-    .tear-line { border-bottom: 2px dashed #D9E0EA; margin: 20px 0; }
+    .badge-rem   { background: #CCE5FF; color: #004085; }
+    .badge-part  { background: #D4EDDA; color: #155724; }
+    .badge-order { background: #FFF3CD; color: #856404; }
+    .item-id {
+      font-family: 'Courier New', monospace; font-size: 26px;
+      font-weight: 700; margin-bottom: 6px;
+    }
+    .item-name {
+      font-size: 14px; color: #444; margin-bottom: 20px; line-height: 1.4;
+    }
+    .tear-line { border-bottom: 2px dashed #D9E0EA; margin: 18px 0; }
     .btn {
       display: block; width: 100%; padding: 14px; border: none;
       border-radius: 3px; font-size: 14px; font-weight: 700;
@@ -36,56 +45,99 @@
       text-transform: uppercase; font-family: inherit;
       text-decoration: none; text-align: center;
     }
-    .btn-primary { background: #16233F; color: #fff; }
+    .btn-primary   { background: #16233F; color: #fff; }
     .btn-primary:hover { background: #223259; }
+    .btn-teal      { background: #1F7A5C; color: #fff; }
+    .btn-teal:hover { background: #185f47; }
+    .btn-amber     { background: #B8722B; color: #fff; }
     .btn-secondary { background: #EEF1F6; color: #16233F; border: 1px solid #D9E0EA; }
     .btn-secondary:hover { border-color: #16233F; }
-    .hint { font-size: 11px; color: #6B7686; margin-top: 16px; line-height: 1.5; }
-    .err { color: #C43E1D; font-size: 14px; padding: 20px 0; }
+    .err  { color: #C43E1D; font-size: 14px; padding: 16px 0; }
+    .hint { font-size: 11px; color: #6B7686; margin-top: 14px; line-height: 1.5; }
   </style>
 </head>
 <body>
 <div class="card">
   <div class="eyebrow">МТСК · Складской модуль</div>
-  <div class="order-id" id="orderIdDisplay">—</div>
-  <div class="sub" id="subText">QR-код запчасти</div>
+  <div id="badgeEl"></div>
+  <div class="item-id" id="itemId">—</div>
+  <div class="item-name" id="itemName"></div>
   <div class="tear-line"></div>
   <div id="buttons"></div>
   <div class="hint" id="hint"></div>
 </div>
 
 <script>
-  const ENGINEER_APP_URL = 'https://script.google.com/macros/s/AKfycbwipZLCMyByQDkVqs_j_LOuTcd8xGTr6OMGi3DgOsU8d6rFAXWZFRGmJskU2Q4AdjNr/exec';
+  const ENGINEER_APP_URL  = 'https://script.google.com/macros/s/AKfycbwipZLCMyByQDkVqs_j_LOuTcd8xGTr6OMGi3DgOsU8d6rFAXWZFRGmJskU2Q4AdjNr/exec';
+  const WAREHOUSE_APP_URL = 'https://script.google.com/macros/s/WAREHOUSE_DEPLOY_ID/exec'; // заменить при деплое
 
-  const params = new URLSearchParams(window.location.search);
-  const orderId = params.get('orderId') || '';
+  const params   = new URLSearchParams(window.location.search);
+  const repairId = params.get('repairId') || '';
+  const partId   = params.get('partId')   || '';
+  const orderId  = params.get('orderId')  || '';
 
-  const display = document.getElementById('orderIdDisplay');
-  const sub = document.getElementById('subText');
-  const buttons = document.getElementById('buttons');
-  const hint = document.getElementById('hint');
+  const badgeEl  = document.getElementById('badgeEl');
+  const itemIdEl = document.getElementById('itemId');
+  const nameEl   = document.getElementById('itemName');
+  const buttons  = document.getElementById('buttons');
+  const hint     = document.getElementById('hint');
 
-  if (!orderId) {
-    display.textContent = 'Ошибка';
-    sub.innerHTML = '<span style="color:#C43E1D">ID заказа не указан.<br>Используйте QR-код с наклейки.</span>';
-  } else {
-    display.textContent = orderId;
-    sub.textContent = 'Отсканирован QR-код запчасти. Выберите действие:';
+  if (repairId) {
+    // ── РЕМОНТ ──────────────────────────────────────────────
+    badgeEl.innerHTML = '<span class="badge badge-rem">🔧 Ремонт</span>';
+    itemIdEl.textContent = repairId;
+    nameEl.textContent = 'Отсканирован QR оборудования в ремонте.';
 
-    // Кнопка «Подтвердить получение» — ведёт в кабинет инженера
-    // который уже знает кто залогинен и выполнит подтверждение
+    const takeUrl = ENGINEER_APP_URL + '?repairId=' + encodeURIComponent(repairId) + '&action=take_repair';
+    const viewUrl = ENGINEER_APP_URL + '?repairId=' + encodeURIComponent(repairId) + '&action=view_repair';
+    const whUrl   = WAREHOUSE_APP_URL + '?repairId=' + encodeURIComponent(repairId);
+
+    buttons.innerHTML =
+      '<a class="btn btn-teal"      href="' + takeUrl + '">✅ Взять в работу</a>' +
+      '<a class="btn btn-primary"   href="' + viewUrl + '">👁️ Карточка ремонта (инженер)</a>' +
+      '<a class="btn btn-secondary" href="' + whUrl   + '">📦 Открыть в складском кабинете</a>';
+
+    hint.innerHTML = '«Взять в работу» и «Карточка ремонта» открывают ЛК инженера.<br>Требуется авторизация.';
+
+  } else if (partId) {
+    // ── ЗАПЧАСТЬ ────────────────────────────────────────────
+    badgeEl.innerHTML = '<span class="badge badge-part">📦 Запчасть</span>';
+    itemIdEl.textContent = partId;
+    nameEl.textContent = 'Отсканирован QR ячейки/коробки со склада.';
+
+    const cardUrl   = WAREHOUSE_APP_URL + '?partId=' + encodeURIComponent(partId);
+    const issueUrl  = WAREHOUSE_APP_URL + '?partId=' + encodeURIComponent(partId) + '&action=issue';
+    const arriveUrl = WAREHOUSE_APP_URL + '?partId=' + encodeURIComponent(partId) + '&action=arrive';
+
+    buttons.innerHTML =
+      '<a class="btn btn-primary"   href="' + cardUrl   + '">📋 Открыть карточку запчасти</a>' +
+      '<a class="btn btn-amber"     href="' + issueUrl  + '">− Выдача</a>' +
+      '<a class="btn btn-teal"      href="' + arriveUrl + '">＋ Приход</a>';
+
+    hint.innerHTML = 'Открывает складской кабинет.<br>Требуется авторизация.';
+
+  } else if (orderId) {
+    // ── ЗАКАЗ (обратная совместимость) ──────────────────────
+    badgeEl.innerHTML = '<span class="badge badge-order">🛒 Заказ</span>';
+    itemIdEl.textContent = orderId;
+    nameEl.textContent = 'Отсканирован QR заказа на закупку.';
+
     const confirmUrl = ENGINEER_APP_URL + '?action=confirm_part&orderId=' + encodeURIComponent(orderId);
     const selfUrl    = ENGINEER_APP_URL + '?action=self_pickup&orderId='  + encodeURIComponent(orderId);
     const viewUrl    = ENGINEER_APP_URL + '?action=view_order&orderId='   + encodeURIComponent(orderId);
 
     buttons.innerHTML =
-      '<a class="btn btn-primary" href="' + confirmUrl + '">✅ Подтвердить получение</a>' +
-      '<a class="btn btn-primary" href="' + selfUrl + '">🚶 Я забрал сам (в обход склада)</a>' +
-      '<a class="btn btn-secondary" href="' + viewUrl + '">👁️ Просмотр карточки заказа</a>';
+      '<a class="btn btn-teal"      href="' + confirmUrl + '">✅ Подтвердить получение</a>' +
+      '<a class="btn btn-primary"   href="' + selfUrl    + '">🚶 Я забрал сам (в обход склада)</a>' +
+      '<a class="btn btn-secondary" href="' + viewUrl    + '">👁️ Просмотр карточки заказа</a>';
 
-    hint.innerHTML =
-      'Кнопки открывают кабинет инженера.<br>' +
-      'Если вы не инженер — используйте «Просмотр».';
+    hint.innerHTML = 'Кнопки открывают кабинет инженера.<br>Если вы не инженер — используйте «Просмотр».';
+
+  } else {
+    // ── ОШИБКА ──────────────────────────────────────────────
+    badgeEl.innerHTML = '';
+    itemIdEl.textContent = '—';
+    nameEl.innerHTML = '<span class="err">QR-код не распознан.<br>Используйте QR с наклейки МТСК.</span>';
   }
 </script>
 </body>

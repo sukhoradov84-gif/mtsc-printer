@@ -8,353 +8,567 @@
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: #EEF1F6;
-      color: #16233F;
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
+      background: #EEF1F6; color: #16233F;
+      min-height: 100vh; display: flex; align-items: center;
+      justify-content: center; padding: 20px;
     }
     .card {
-      background: #fff;
-      border-radius: 4px;
+      background: #fff; border-radius: 4px;
       box-shadow: 0 4px 20px rgba(22,35,63,0.12);
-      padding: 32px;
-      width: 100%;
-      max-width: 380px;
-      text-align: center;
+      padding: 28px 28px 24px; width: 100%; max-width: 400px;
       border-top: 4px solid #C43E1D;
     }
     .eyebrow {
-      font-family: 'Courier New', monospace;
-      font-size: 10px;
-      letter-spacing: 2px;
-      color: #6B7686;
-      text-transform: uppercase;
-      margin-bottom: 4px;
+      font-family: 'Courier New', monospace; font-size: 10px;
+      letter-spacing: 2px; color: #6B7686; text-transform: uppercase;
+      margin-bottom: 4px; text-align: center;
     }
-    h1 { font-size: 20px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 20px; }
-    .order-id {
-      font-family: 'Courier New', monospace;
-      font-size: 22px;
-      font-weight: 700;
-      color: #16233F;
-      background: #EEF1F6;
-      padding: 8px 16px;
-      border-radius: 3px;
-      margin-bottom: 20px;
-      display: inline-block;
+    h1 { font-size: 18px; font-weight: 700; text-transform: uppercase;
+         letter-spacing: 0.5px; margin-bottom: 16px; text-align: center; }
+
+    /* Тип наклейки */
+    .type-tabs { display: flex; gap: 0; margin-bottom: 16px; border: 1px solid #D9E0EA; border-radius: 3px; overflow: hidden; }
+    .type-tab {
+      flex: 1; padding: 9px 4px; border: none; background: #F5F7FC;
+      font-size: 12px; font-weight: 700; cursor: pointer; text-align: center;
+      text-transform: uppercase; letter-spacing: 0.3px; color: #6B7686;
+      border-right: 1px solid #D9E0EA; transition: background 0.15s;
     }
-    #qrPreview { margin: 0 auto 20px; display: flex; align-items: center; justify-content: center; }
-    #qrPreview canvas, #qrPreview img { border: 1px solid #D9E0EA; border-radius: 3px; }
+    .type-tab:last-child { border-right: none; }
+    .type-tab.active { background: #16233F; color: #fff; }
+
+    /* Поля данных */
+    .fields { margin-bottom: 14px; display: flex; flex-direction: column; gap: 8px; }
+    .field label {
+      display: block; font-size: 11px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.3px; color: #6B7686; margin-bottom: 3px;
+    }
+    .field input {
+      width: 100%; padding: 8px 10px; border: 1px solid #D9E0EA;
+      border-radius: 3px; font-size: 13px; font-family: inherit;
+    }
+    .field input:focus { outline: none; border-color: #16233F; }
+
+    /* Предпросмотр наклейки */
+    .preview-wrap {
+      border: 1px solid #D9E0EA; border-radius: 3px; background: #fff;
+      margin-bottom: 14px; display: flex; align-items: center;
+      justify-content: center; overflow: hidden; min-height: 120px;
+    }
+    #labelPreviewCanvas { display: block; }
+
+    /* Размер ленты */
+    .tape-section { margin-bottom: 14px; }
+    .tape-section label {
+      display: block; font-size: 11px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.3px; color: #6B7686; margin-bottom: 6px;
+    }
+    .tape-grid { display: flex; flex-wrap: wrap; gap: 6px; }
+    .tape-btn {
+      padding: 5px 10px; border: 1px solid #D9E0EA; border-radius: 3px;
+      background: #F5F7FC; font-size: 12px; font-weight: 600; cursor: pointer;
+      font-family: 'Courier New', monospace; color: #16233F;
+    }
+    .tape-btn.active { background: #16233F; color: #fff; border-color: #16233F; }
+    .tape-custom { display: flex; gap: 6px; margin-top: 6px; }
+    .tape-custom input {
+      flex: 1; padding: 5px 8px; border: 1px solid #D9E0EA;
+      border-radius: 3px; font-size: 12px; text-align: center;
+    }
+
+    /* Кнопки */
     .btn {
-      display: block; width: 100%; padding: 12px; border: none; border-radius: 3px;
-      font-size: 14px; font-weight: 700; letter-spacing: 0.3px; cursor: pointer;
-      margin-bottom: 10px; text-transform: uppercase;
+      display: block; width: 100%; padding: 11px; border: none; border-radius: 3px;
+      font-size: 13px; font-weight: 700; letter-spacing: 0.3px; cursor: pointer;
+      margin-bottom: 8px; text-transform: uppercase; font-family: inherit;
     }
     .btn-primary { background: #16233F; color: #fff; }
     .btn-primary:hover { background: #223259; }
     .btn-primary:disabled { background: #B7BFC8; cursor: default; }
+    .btn-teal { background: #1F7A5C; color: #fff; }
+    .btn-teal:hover { background: #185f47; }
     .btn-secondary { background: #EEF1F6; color: #16233F; border: 1px solid #D9E0EA; }
     .btn-secondary:hover { border-color: #16233F; }
-    .status { margin-top: 12px; font-size: 13px; min-height: 20px; color: #6B7686; }
-    .status.ok { color: #1F7A5C; }
+
+    .status { margin-top: 8px; font-size: 12.5px; min-height: 18px; color: #6B7686; text-align: center; }
+    .status.ok  { color: #1F7A5C; }
     .status.err { color: #C43E1D; }
-    .status.info { color: #2B5FA8; }
-    .size-row { display: flex; gap: 8px; margin-bottom: 14px; }
-    .size-row label {
-      font-size: 11px; color: #6B7686; text-align: left; display: block;
-      margin-bottom: 3px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.3px;
-    }
-    .size-row input { width: 100%; padding: 7px 8px; border: 1px solid #D9E0EA; border-radius: 3px; font-size: 14px; text-align: center; }
-    .tear-line { border-bottom: 2px dashed #C7CFDC; margin: 20px 0; }
-    .hint { font-size: 11.5px; color: #6B7686; line-height: 1.5; }
-    .hint a { color: #2B5FA8; }
-    #libStatus { font-size: 11px; color: #6B7686; margin-bottom: 10px; min-height: 14px; }
+    .status.info{ color: #2B5FA8; }
+
+    .tear-line { border-bottom: 2px dashed #C7CFDC; margin: 14px 0; }
+    #libStatus { font-size: 11px; color: #6B7686; margin-bottom: 8px; text-align: center; min-height: 14px; }
+    .hint { font-size: 11px; color: #6B7686; line-height: 1.5; text-align: center; }
   </style>
 </head>
 <body>
 <div class="card">
   <div class="eyebrow">МТСК · Складской модуль</div>
   <h1>🖨️ Печать наклейки</h1>
-  <div id="orderIdDisplay" class="order-id">—</div>
-  <div id="qrPreview"></div>
-  <div class="tear-line"></div>
-  <div class="size-row">
-    <div style="flex:1">
-      <label>Ширина (px)</label>
-      <input type="number" id="labelWidth" value="320" min="96" max="384">
-    </div>
-    <div style="flex:1">
-      <label>Высота (px)</label>
-      <input type="number" id="labelHeight" value="320" min="96" max="600">
+
+  <!-- Тип наклейки -->
+  <div class="type-tabs">
+    <button class="type-tab active" id="tab-rem" onclick="setType('rem')">🔧 Ремонт</button>
+    <button class="type-tab" id="tab-part" onclick="setType('part')">📦 Запчасть</button>
+    <button class="type-tab" id="tab-order" onclick="setType('order')">🛒 Заказ</button>
+  </div>
+
+  <!-- Поля -->
+  <div class="fields" id="fieldsBlock"></div>
+
+  <!-- Предпросмотр -->
+  <div class="preview-wrap" id="previewWrap">
+    <canvas id="labelPreviewCanvas"></canvas>
+  </div>
+
+  <!-- Размер ленты -->
+  <div class="tape-section">
+    <label>Размер ленты (мм × мм → px)</label>
+    <div class="tape-grid" id="tapeGrid"></div>
+    <div class="tape-custom">
+      <input type="number" id="customW" placeholder="Ш px" min="48" max="576">
+      <input type="number" id="customH" placeholder="В px" min="48" max="960">
+      <button class="tape-btn" onclick="applyCustomSize()">✓</button>
     </div>
   </div>
+
+  <div class="tear-line"></div>
+
   <div id="libStatus">Загрузка библиотеки принтера...</div>
-  <button class="btn btn-primary" id="connectBtn" onclick="connectPrinter()" disabled>
-    🔵 Подключить B1
-  </button>
-  <button class="btn btn-primary" id="printBtn" onclick="printLabel()" disabled>
-    🖨️ Напечатать
-  </button>
-  <button class="btn btn-secondary" onclick="regenerateQR()">
-    🔄 Обновить QR
-  </button>
-  <div class="status" id="status">Загрузка...</div>
+  <button class="btn btn-primary" id="connectBtn" onclick="connectPrinter()" disabled>🔵 Подключить B1</button>
+  <button class="btn btn-teal"    id="printBtn"   onclick="printLabel()"    disabled>🖨️ Напечатать</button>
+  <button class="btn btn-secondary"               onclick="updatePreview()">🔄 Обновить превью</button>
+  <div class="status" id="status">Инициализация...</div>
+
   <div class="tear-line"></div>
   <div class="hint">
-    Работает только в <strong>Chrome</strong> на компьютере или Android.<br>
-    Bluetooth должен быть включён.<br>
-    Принтер должен быть включён и в зоне видимости.
+    Работает только в <strong>Chrome</strong> на ПК или Android.<br>
+    Bluetooth должен быть включён. Принтер — в зоне видимости.
   </div>
 </div>
 
-<!-- QRCode.js для предпросмотра -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-
-<!-- niimbluelib загружается через ESM import в основном скрипте -->
 <script type="module">
-  // ============================================================
-  // КОНФИГУРАЦИЯ
-  // ============================================================
-  const SCAN_PAGE_URL = 'https://sukhoradov84-gif.github.io/mtsc-printer/scan.html';
 
-  // Импортируем локальный ESM файл
-  let NiimbotBluetoothClient = null;
-  let ImageEncoder = null;
+// ============================================================
+// КОНСТАНТЫ
+// ============================================================
+const ENGINEER_APP_URL   = 'https://script.google.com/macros/s/AKfycbwipZLCMyByQDkVqs_j_LOuTcd8xGTr6OMGi3DgOsU8d6rFAXWZFRGmJskU2Q4AdjNr/exec';
+const WAREHOUSE_APP_URL  = 'https://script.google.com/macros/s/WAREHOUSE_DEPLOY_ID/exec'; // заменить при деплое
 
-  // Пробуем локальный ESM, если нет — esm.sh
-  async function loadLib() {
-    try {
-      // Попытка 1: локальный файл как ESM (нужен niimbluelib.esm.js)
-      const lib = await import('./niimbluelib.esm.js');
-      NiimbotBluetoothClient = lib.NiimbotBluetoothClient;
-      ImageEncoder = lib.ImageEncoder;
-    } catch(e) {
-      // Попытка 2: esm.sh CDN
-      const lib = await import('https://esm.sh/@mmote/niimbluelib@0.0.1-alpha.40');
-      NiimbotBluetoothClient = lib.NiimbotBluetoothClient;
-      ImageEncoder = lib.ImageEncoder;
-    }
-    if (NiimbotBluetoothClient && ImageEncoder) {
-      document.getElementById('libStatus').textContent = '✅ Библиотека загружена';
-      document.getElementById('connectBtn').disabled = false;
-      setStatus('Нажмите «Подключить B1» для начала работы', '');
-    } else {
-      document.getElementById('libStatus').textContent = '❌ Не удалось загрузить библиотеку';
-      setStatus('Ошибка загрузки библиотеки', 'err');
-    }
+// Размерная сетка Niimbot B1: [ширина мм, высота мм, ширина px, высота px]
+const TAPE_SIZES = [
+  { label: '40×40', w: 320, h: 320 },
+  { label: '40×30', w: 320, h: 240 },
+  { label: '40×12', w: 320, h:  96 },
+  { label: '50×30', w: 400, h: 240 },
+  { label: '60×40', w: 480, h: 320 },
+];
+
+// Схема полей для каждого типа наклейки
+const TYPE_FIELDS = {
+  rem: [
+    { id: 'f_id',   label: 'ID ремонта',   placeholder: 'REM-0001' },
+    { id: 'f_name', label: 'Наименование', placeholder: 'Дефибриллятор ДКИ-Н-10' },
+    { id: 'f_lpu',  label: 'ЛПУ',          placeholder: 'ГП 78' },
+  ],
+  part: [
+    { id: 'f_id',      label: 'ID запчасти',  placeholder: 'PART-0001' },
+    { id: 'f_name',    label: 'Наименование', placeholder: 'Аккумулятор Delta 12V' },
+    { id: 'f_article', label: 'Артикул',      placeholder: 'DTM12022' },
+  ],
+  order: [
+    { id: 'f_id',   label: 'ID заказа',    placeholder: 'ORD-00041' },
+    { id: 'f_name', label: 'Описание',     placeholder: 'Кабель ЭКГ Nihon Kohden' },
+  ],
+};
+
+// ============================================================
+// СОСТОЯНИЕ
+// ============================================================
+let currentType   = 'rem';
+let currentW      = 320;
+let currentH      = 320;
+let client        = null;
+let NiimbotBluetoothClient = null;
+let ImageEncoder           = null;
+
+// ============================================================
+// УТИЛИТЫ
+// ============================================================
+function setStatus(msg, cls) {
+  const el = document.getElementById('status');
+  el.textContent = msg;
+  el.className = 'status' + (cls ? ' ' + cls : '');
+}
+
+function getFieldVal(id) {
+  const el = document.getElementById(id);
+  return el ? el.value.trim() : '';
+}
+
+function buildQrUrl() {
+  const id = getFieldVal('f_id');
+  if (!id) return '';
+  if (currentType === 'rem')   return ENGINEER_APP_URL   + '?repairId='  + encodeURIComponent(id);
+  if (currentType === 'part')  return WAREHOUSE_APP_URL  + '?partId='    + encodeURIComponent(id);
+  if (currentType === 'order') return ENGINEER_APP_URL   + '?action=view_order&orderId=' + encodeURIComponent(id);
+  return '';
+}
+
+// ============================================================
+// ТИПЫ — рендер полей
+// ============================================================
+window.setType = function(type) {
+  currentType = type;
+  document.querySelectorAll('.type-tab').forEach(b => b.classList.toggle('active', b.id === 'tab-' + type));
+  renderFields();
+  updatePreview();
+};
+
+function renderFields() {
+  const block = document.getElementById('fieldsBlock');
+  const fields = TYPE_FIELDS[currentType] || [];
+  block.innerHTML = fields.map(f =>
+    `<div class="field">
+      <label>${f.label}</label>
+      <input type="text" id="${f.id}" placeholder="${f.placeholder}" oninput="updatePreview()">
+    </div>`
+  ).join('');
+  // Если URL передал параметры — подставляем
+  const params = new URLSearchParams(window.location.search);
+  if (currentType === 'rem' && params.get('repairId')) {
+    const el = document.getElementById('f_id');
+    if (el) el.value = params.get('repairId');
+  }
+  if (currentType === 'part' && params.get('partId')) {
+    const el = document.getElementById('f_id');
+    if (el) el.value = params.get('partId');
+  }
+  if (currentType === 'order' && params.get('orderId')) {
+    const el = document.getElementById('f_id');
+    if (el) el.value = params.get('orderId');
+  }
+  // доп поля из URL
+  const nameEl = document.getElementById('f_name');
+  if (nameEl && params.get('name')) nameEl.value = params.get('name');
+  const lpuEl  = document.getElementById('f_lpu');
+  if (lpuEl  && params.get('lpu'))  lpuEl.value  = params.get('lpu');
+  const artEl  = document.getElementById('f_article');
+  if (artEl  && params.get('article')) artEl.value = params.get('article');
+}
+
+// ============================================================
+// РАЗМЕР ЛЕНТЫ
+// ============================================================
+function renderTapeGrid() {
+  const grid = document.getElementById('tapeGrid');
+  grid.innerHTML = TAPE_SIZES.map((s, i) =>
+    `<button class="tape-btn${i === 0 ? ' active' : ''}" onclick="selectTape(${i})" id="tape-${i}">${s.label}</button>`
+  ).join('');
+}
+
+window.selectTape = function(i) {
+  document.querySelectorAll('.tape-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tape-' + i).classList.add('active');
+  currentW = TAPE_SIZES[i].w;
+  currentH = TAPE_SIZES[i].h;
+  updatePreview();
+};
+
+window.applyCustomSize = function() {
+  const w = parseInt(document.getElementById('customW').value);
+  const h = parseInt(document.getElementById('customH').value);
+  if (!w || !h || w < 48 || h < 48) { alert('Укажите корректный размер (мин. 48px)'); return; }
+  document.querySelectorAll('.tape-btn').forEach(b => b.classList.remove('active'));
+  currentW = w; currentH = h;
+  updatePreview();
+};
+
+// ============================================================
+// ПРЕВЬЮ НАКЛЕЙКИ
+// ============================================================
+window.updatePreview = function() {
+  const canvas  = document.getElementById('labelPreviewCanvas');
+  const qrUrl   = buildQrUrl();
+  const id      = getFieldVal('f_id');
+  const name    = getFieldVal('f_name');
+  const sub     = currentType === 'rem'  ? getFieldVal('f_lpu') :
+                  currentType === 'part' ? getFieldVal('f_article') : '';
+
+  // Масштаб для превью — не больше 300px по большей стороне
+  const scale   = Math.min(300 / currentW, 300 / currentH, 1);
+  const pw = Math.round(currentW * scale);
+  const ph = Math.round(currentH * scale);
+  canvas.width  = pw;
+  canvas.height = ph;
+  const ctx = canvas.getContext('2d');
+  ctx.fillStyle = '#ffffff';
+  ctx.fillRect(0, 0, pw, ph);
+
+  if (!id || !qrUrl) {
+    ctx.fillStyle = '#D9E0EA';
+    ctx.font = '12px Segoe UI';
+    ctx.textAlign = 'center';
+    ctx.fillText('Заполните поля', pw / 2, ph / 2);
+    return;
   }
 
-  let client = null;
-  let orderId = '';
+  // Генерируем QR во временный div
+  const tmp = document.createElement('div');
+  tmp.style.cssText = 'position:absolute;left:-9999px;top:-9999px;';
+  document.body.appendChild(tmp);
+  const qrSize = Math.round(Math.min(pw, ph) * 0.55);
+  new QRCode(tmp, {
+    text: qrUrl, width: qrSize, height: qrSize,
+    colorDark: '#000000', colorLight: '#ffffff',
+    correctLevel: QRCode.CorrectLevel.H
+  });
 
-  function initLib() { /* заменена на loadLib() выше */ }
+  setTimeout(() => {
+    const img = tmp.querySelector('img') || tmp.querySelector('canvas');
+    const drawQr = (src) => {
+      document.body.removeChild(tmp);
+      // Располагаем QR слева или по центру в зависимости от ориентации
+      const landscape = pw > ph;
+      let qrX, qrY;
+      if (landscape) {
+        qrX = Math.round((ph - qrSize) / 2);
+        qrY = Math.round((ph - qrSize) / 2);
+      } else {
+        qrX = Math.round((pw - qrSize) / 2);
+        qrY = 8;
+      }
+      ctx.drawImage(src, qrX, qrY, qrSize, qrSize);
 
-  function onLibLoaded() { /* не используется */ }
-  function onLibError() { /* не используется */ }
+      // Текст
+      ctx.fillStyle = '#000000';
+      ctx.textAlign = landscape ? 'left' : 'center';
+      const tx = landscape ? (qrX + qrSize + 8) : pw / 2;
+      let ty   = landscape ? 20 : (qrY + qrSize + 14);
 
-  function getOrderId() {
-    const params = new URLSearchParams(window.location.search);
-    return params.get('orderId') || '';
-  }
+      const maxW = landscape ? (pw - tx - 4) : pw - 8;
+      // ID
+      ctx.font = `bold ${Math.round(Math.min(ph, pw) * 0.09)}px Courier New`;
+      ctx.fillText(id, tx, ty, maxW);
+      ty += Math.round(Math.min(ph, pw) * 0.11);
+      // Наименование — перенос если длинное
+      ctx.font = `${Math.round(Math.min(ph, pw) * 0.07)}px Segoe UI`;
+      const words = name.split(' ');
+      let line = '';
+      for (const w of words) {
+        const test = line ? line + ' ' + w : w;
+        if (ctx.measureText(test).width > maxW && line) {
+          ctx.fillText(line, tx, ty, maxW);
+          ty += Math.round(Math.min(ph, pw) * 0.09);
+          line = w;
+        } else { line = test; }
+      }
+      if (line) { ctx.fillText(line, tx, ty, maxW); ty += Math.round(Math.min(ph, pw) * 0.09); }
+      // Подстрока (ЛПУ или артикул)
+      if (sub) {
+        ctx.fillStyle = '#555555';
+        ctx.font = `${Math.round(Math.min(ph, pw) * 0.06)}px Segoe UI`;
+        ctx.fillText(sub, tx, ty, maxW);
+      }
+    };
 
-  function buildQrUrl(oid) {
-    return SCAN_PAGE_URL + '?orderId=' + encodeURIComponent(oid);
-  }
+    if (!img) { document.body.removeChild(tmp); return; }
+    if (img.tagName === 'CANVAS') { drawQr(img); }
+    else if (img.complete) { drawQr(img); }
+    else { img.onload = () => drawQr(img); }
+  }, 250);
+};
 
-  function setStatus(msg, cls) {
-    const el = document.getElementById('status');
-    el.textContent = msg;
-    el.className = 'status' + (cls ? ' ' + cls : '');
-  }
+// ============================================================
+// ПЕЧАТЬ — canvas для принтера (полный размер)
+// ============================================================
+function buildPrintCanvas() {
+  return new Promise((resolve, reject) => {
+    const qrUrl = buildQrUrl();
+    const id    = getFieldVal('f_id');
+    const name  = getFieldVal('f_name');
+    const sub   = currentType === 'rem'  ? getFieldVal('f_lpu') :
+                  currentType === 'part' ? getFieldVal('f_article') : '';
+    if (!qrUrl || !id) { reject(new Error('Заполните поля')); return; }
 
-  function renderQrPreview(oid) {
-    const container = document.getElementById('qrPreview');
-    container.innerHTML = '';
-    if (!oid) {
-      container.innerHTML = '<div style="color:#bbb;font-size:13px;">ID заказа не указан</div>';
-      return;
-    }
-    new QRCode(container, {
-      text: buildQrUrl(oid),
-      width: 180,
-      height: 180,
-      colorDark: '#000000',
-      colorLight: '#ffffff',
+    const canvas = document.createElement('canvas');
+    canvas.width  = currentW;
+    canvas.height = currentH;
+    const ctx = canvas.getContext('2d');
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(0, 0, currentW, currentH);
+
+    const tmp = document.createElement('div');
+    tmp.style.cssText = 'position:absolute;left:-9999px;top:-9999px;';
+    document.body.appendChild(tmp);
+    const qrSize = Math.round(Math.min(currentW, currentH) * 0.55);
+    new QRCode(tmp, {
+      text: qrUrl, width: qrSize, height: qrSize,
+      colorDark: '#000000', colorLight: '#ffffff',
       correctLevel: QRCode.CorrectLevel.H
     });
-  }
 
-  function buildPrintCanvas(oid, width, height) {
-    return new Promise((resolve, reject) => {
-      const canvas = document.createElement('canvas');
-      canvas.width = width;
-      canvas.height = height;
-      const ctx = canvas.getContext('2d');
-      ctx.fillStyle = '#ffffff';
-      ctx.fillRect(0, 0, width, height);
+    setTimeout(() => {
+      const img = tmp.querySelector('img') || tmp.querySelector('canvas');
+      if (!img) { document.body.removeChild(tmp); reject(new Error('QR не сгенерирован')); return; }
 
-      const tmp = document.createElement('div');
-      tmp.style.cssText = 'position:absolute;left:-9999px;top:-9999px;';
-      document.body.appendChild(tmp);
-      new QRCode(tmp, {
-        text: buildQrUrl(oid),
-        width: Math.min(width, height),
-        height: Math.min(width, height),
-        colorDark: '#000000',
-        colorLight: '#ffffff',
-        correctLevel: QRCode.CorrectLevel.H
-      });
-      setTimeout(() => {
-        const img = tmp.querySelector('img') || tmp.querySelector('canvas');
-        if (!img) { document.body.removeChild(tmp); reject(new Error('QR не сгенерирован')); return; }
-        const qrSize = Math.min(width, height) - 40; // отступ 20px с каждой стороны
-        const x = Math.floor((width - qrSize) / 2);
-        const y = Math.floor((height - qrSize) / 2);
-        const finish = () => { document.body.removeChild(tmp); resolve(canvas); };
-        if (img.tagName === 'CANVAS') {
-          ctx.drawImage(img, x, y, qrSize, qrSize);
-          finish();
-        } else if (img.complete) {
-          ctx.drawImage(img, x, y, qrSize, qrSize);
-          finish();
+      const drawAndResolve = (src) => {
+        document.body.removeChild(tmp);
+        const landscape = currentW > currentH;
+        let qrX, qrY;
+        if (landscape) {
+          qrX = Math.round((currentH - qrSize) / 2);
+          qrY = Math.round((currentH - qrSize) / 2);
         } else {
-          img.onload = () => { ctx.drawImage(img, x, y, qrSize, qrSize); finish(); };
-          img.onerror = () => { document.body.removeChild(tmp); reject(new Error('Ошибка QR-изображения')); };
+          qrX = Math.round((currentW - qrSize) / 2);
+          qrY = 10;
         }
-      }, 300);
-    });
-  }
+        ctx.drawImage(src, qrX, qrY, qrSize, qrSize);
 
-  window.regenerateQR = function() {
-    renderQrPreview(orderId);
-  };
+        ctx.fillStyle = '#000000';
+        ctx.textAlign = landscape ? 'left' : 'center';
+        const tx = landscape ? (qrX + qrSize + 10) : currentW / 2;
+        let ty   = landscape ? 24 : (qrY + qrSize + 16);
+        const maxW = landscape ? (currentW - tx - 6) : currentW - 10;
 
-  window.connectPrinter = async function() {
-    if (!NiimbotBluetoothClient) { setStatus('Библиотека не загружена', 'err'); return; }
-    if (!navigator.bluetooth) {
-      setStatus('Web Bluetooth не поддерживается. Используйте Chrome на ПК или Android.', 'err');
-      return;
-    }
-    const btn = document.getElementById('connectBtn');
-    btn.disabled = true;
-    btn.textContent = '⏳ Подключение...';
-    setStatus('Выберите принтер в диалоге браузера...', 'info');
-    try {
-      client = new NiimbotBluetoothClient();
-      if (!client) throw new Error('Не удалось создать экземпляр клиента принтера');
+        ctx.font = `bold ${Math.round(Math.min(currentH, currentW) * 0.09)}px Courier New`;
+        ctx.fillText(id, tx, ty, maxW);
+        ty += Math.round(Math.min(currentH, currentW) * 0.11);
 
-      // Проверяем что у клиента есть метод connect
-      if (typeof client.connect !== 'function') {
-        throw new Error('API библиотеки изменился — метод connect не найден. Версия: ' + (niimbluelib.version || 'неизвестна'));
-      }
-
-      client.on('connect', () => {
-        setStatus('✅ Принтер подключён!', 'ok');
-        document.getElementById('printBtn').disabled = false;
-        btn.textContent = '✅ B1 подключён';
-      });
-      client.on('disconnect', () => {
-        setStatus('Принтер отключён', '');
-        document.getElementById('printBtn').disabled = true;
-        btn.disabled = false;
-        btn.textContent = '🔵 Подключить B1';
-        client = null;
-      });
-
-      // B1 иногда разрывает соединение сразу после GATT-handshake —
-      // делаем до 3 попыток с паузой между ними
-      let lastError;
-      for (let attempt = 1; attempt <= 3; attempt++) {
-        try {
-          if (attempt > 1) {
-            setStatus(`Повторное подключение (попытка ${attempt}/3)...`, 'info');
-            await new Promise(r => setTimeout(r, 1500));
-          }
-          await client.connect();
-          lastError = null;
-          break;
-        } catch(e) {
-          lastError = e;
-          const isGattDisconnect = e.message && (
-            e.message.includes('GATT Server is disconnected') ||
-            e.message.includes('Connection timeout') ||
-            e.message.includes('gatt')
-          );
-          if (!isGattDisconnect || attempt === 3) break;
-          console.warn(`Попытка ${attempt} не удалась:`, e.message);
+        ctx.font = `${Math.round(Math.min(currentH, currentW) * 0.07)}px Segoe UI`;
+        const words = name.split(' ');
+        let line = '';
+        for (const w of words) {
+          const test = line ? line + ' ' + w : w;
+          if (ctx.measureText(test).width > maxW && line) {
+            ctx.fillText(line, tx, ty, maxW);
+            ty += Math.round(Math.min(currentH, currentW) * 0.09);
+            line = w;
+          } else { line = test; }
         }
-      }
-      if (lastError) throw lastError;
+        if (line) { ctx.fillText(line, tx, ty, maxW); ty += Math.round(Math.min(currentH, currentW) * 0.09); }
 
-    } catch(e) {
-      setStatus('Ошибка подключения: ' + e.message, 'err');
-      btn.disabled = false;
-      btn.textContent = '🔵 Подключить B1';
-      client = null;
-    }
-  };
+        if (sub) {
+          ctx.fillStyle = '#555555';
+          ctx.font = `${Math.round(Math.min(currentH, currentW) * 0.06)}px Segoe UI`;
+          ctx.fillText(sub, tx, ty, maxW);
+        }
+        resolve(canvas);
+      };
 
-  window.printLabel = async function() {
-    if (!client) { setStatus('Принтер не подключён', 'err'); return; }
-    if (!orderId) { setStatus('ID заказа не задан', 'err'); return; }
-    const btn = document.getElementById('printBtn');
-    btn.disabled = true;
-    btn.textContent = '⏳ Печать...';
-    setStatus('Подготовка изображения...', 'info');
-    try {
-      const width = parseInt(document.getElementById('labelWidth').value) || 320;
-      const height = parseInt(document.getElementById('labelHeight').value) || 320;
-      const canvas = await buildPrintCanvas(orderId, width, height);
-      setStatus('Отправка на принтер...', 'info');
-
-      // Получаем тип задачи печати для конкретной модели
-      const printTaskType = client.getPrintTaskType();
-      if (!printTaskType) {
-        throw new Error('Не удалось определить тип задачи для этой модели принтера');
-      }
-
-      // newPrintTask — метод abstraction, не клиента
-      const printTask = client.abstraction.newPrintTask(printTaskType, {
-        quantity: 1,
-        labelType: 1,
-        density: 3,
-        totalPages: 1,
-      });
-
-      // Инициализируем задачу, кодируем canvas и печатаем
-      const encodedImage = ImageEncoder.encodeCanvas(canvas, 'top');
-      await printTask.printInit();
-      await printTask.printPage(encodedImage);
-      await printTask.waitForFinished();
-      await printTask.printEnd();
-
-      setStatus('✅ Наклейка распечатана!', 'ok');
-    } catch(e) {
-      setStatus('Ошибка печати: ' + e.message, 'err');
-      console.error(e);
-    } finally {
-      btn.disabled = false;
-      btn.textContent = '🖨️ Напечатать';
-    }
-  };
-
-  // Инициализация — запускаем когда DOM и все скрипты загружены
-  window.addEventListener('load', function() {
-    orderId = getOrderId();
-    document.getElementById('orderIdDisplay').textContent = orderId || '(ID не указан)';
-    renderQrPreview(orderId);
-    if (!orderId) {
-      setStatus('⚠️ В URL не передан orderId. Пример: ?orderId=ORD-00041', 'err');
-    }
-    // Загружаем библиотеку через ESM
-    loadLib().catch(function(e) {
-      document.getElementById('libStatus').textContent = '❌ ' + e.message;
-      setStatus('Ошибка загрузки библиотеки', 'err');
-    });
+      if (img.tagName === 'CANVAS') { drawAndResolve(img); }
+      else if (img.complete) { drawAndResolve(img); }
+      else { img.onload = () => drawAndResolve(img); img.onerror = () => { document.body.removeChild(tmp); reject(new Error('Ошибка QR')); }; }
+    }, 300);
   });
+}
+
+// ============================================================
+// BLUETOOTH — подключение и печать
+// ============================================================
+async function loadLib() {
+  try {
+    const lib = await import('./niimbluelib.esm.js');
+    NiimbotBluetoothClient = lib.NiimbotBluetoothClient;
+    ImageEncoder           = lib.ImageEncoder;
+  } catch(e) {
+    const lib = await import('https://esm.sh/@mmote/niimbluelib@0.0.1-alpha.40');
+    NiimbotBluetoothClient = lib.NiimbotBluetoothClient;
+    ImageEncoder           = lib.ImageEncoder;
+  }
+  if (NiimbotBluetoothClient && ImageEncoder) {
+    document.getElementById('libStatus').textContent = '✅ Библиотека загружена';
+    document.getElementById('connectBtn').disabled = false;
+    setStatus('Нажмите «Подключить B1»', '');
+  } else {
+    document.getElementById('libStatus').textContent = '❌ Не удалось загрузить библиотеку';
+    setStatus('Ошибка загрузки библиотеки', 'err');
+  }
+}
+
+window.connectPrinter = async function() {
+  if (!NiimbotBluetoothClient) { setStatus('Библиотека не загружена', 'err'); return; }
+  if (!navigator.bluetooth) { setStatus('Web Bluetooth не поддерживается — используйте Chrome', 'err'); return; }
+  const btn = document.getElementById('connectBtn');
+  btn.disabled = true; btn.textContent = '⏳ Подключение...';
+  setStatus('Выберите принтер в диалоге браузера...', 'info');
+  try {
+    client = new NiimbotBluetoothClient();
+    client.on('connect', () => {
+      setStatus('✅ Принтер подключён!', 'ok');
+      document.getElementById('printBtn').disabled = false;
+      btn.textContent = '✅ B1 подключён';
+    });
+    client.on('disconnect', () => {
+      setStatus('Принтер отключён', '');
+      document.getElementById('printBtn').disabled = true;
+      btn.disabled = false; btn.textContent = '🔵 Подключить B1';
+      client = null;
+    });
+    let lastErr;
+    for (let i = 1; i <= 3; i++) {
+      try {
+        if (i > 1) { setStatus(`Повторное подключение (${i}/3)...`, 'info'); await new Promise(r => setTimeout(r, 1500)); }
+        await client.connect(); lastErr = null; break;
+      } catch(e) {
+        lastErr = e;
+        const isGatt = e.message && (e.message.includes('GATT') || e.message.includes('gatt') || e.message.includes('timeout'));
+        if (!isGatt || i === 3) break;
+      }
+    }
+    if (lastErr) throw lastErr;
+  } catch(e) {
+    setStatus('Ошибка: ' + e.message, 'err');
+    btn.disabled = false; btn.textContent = '🔵 Подключить B1'; client = null;
+  }
+};
+
+window.printLabel = async function() {
+  if (!client) { setStatus('Принтер не подключён', 'err'); return; }
+  const btn = document.getElementById('printBtn');
+  btn.disabled = true; btn.textContent = '⏳ Печать...';
+  setStatus('Подготовка изображения...', 'info');
+  try {
+    const canvas = await buildPrintCanvas();
+    setStatus('Отправка на принтер...', 'info');
+    const printTaskType = client.getPrintTaskType();
+    if (!printTaskType) throw new Error('Не удалось определить тип задачи для этой модели');
+    const printTask = client.abstraction.newPrintTask(printTaskType, {
+      quantity: 1, labelType: 1, density: 3, totalPages: 1,
+    });
+    const encodedImage = ImageEncoder.encodeCanvas(canvas, 'top');
+    await printTask.printInit();
+    await printTask.printPage(encodedImage);
+    await printTask.waitForFinished();
+    await printTask.printEnd();
+    setStatus('✅ Наклейка распечатана!', 'ok');
+  } catch(e) {
+    setStatus('Ошибка печати: ' + e.message, 'err');
+  } finally {
+    btn.disabled = false; btn.textContent = '🖨️ Напечатать';
+  }
+};
+
+// ============================================================
+// ИНИЦИАЛИЗАЦИЯ
+// ============================================================
+window.addEventListener('load', function() {
+  renderTapeGrid();
+  // Определяем тип из URL-параметров
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('repairId'))  currentType = 'rem';
+  else if (params.get('partId'))  currentType = 'part';
+  else if (params.get('orderId')) currentType = 'order';
+
+  document.querySelectorAll('.type-tab').forEach(b => b.classList.toggle('active', b.id === 'tab-' + currentType));
+  renderFields();
+  updatePreview();
+
+  loadLib().catch(e => {
+    document.getElementById('libStatus').textContent = '❌ ' + e.message;
+    setStatus('Ошибка загрузки библиотеки', 'err');
+  });
+});
 </script>
 </body>
 </html>
