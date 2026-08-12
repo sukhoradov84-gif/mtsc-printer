@@ -317,7 +317,7 @@ window.updatePreview = function() {
   const tmp = document.createElement('div');
   tmp.style.cssText = 'position:absolute;left:-9999px;top:-9999px;';
   document.body.appendChild(tmp);
-  const qrSize = Math.round(Math.min(pw, ph) * 0.55);
+  const qrSize = Math.round(Math.min(pw, ph) * 0.65);
   new QRCode(tmp, {
     text: qrUrl, width: qrSize, height: qrSize,
     colorDark: '#000000', colorLight: '#ffffff',
@@ -328,7 +328,6 @@ window.updatePreview = function() {
     const img = tmp.querySelector('img') || tmp.querySelector('canvas');
     const drawQr = (src) => {
       document.body.removeChild(tmp);
-      // Располагаем QR слева или по центру в зависимости от ориентации
       const landscape = pw > ph;
       let qrX, qrY;
       if (landscape) {
@@ -336,38 +335,41 @@ window.updatePreview = function() {
         qrY = Math.round((ph - qrSize) / 2);
       } else {
         qrX = Math.round((pw - qrSize) / 2);
-        qrY = 8;
+        qrY = 6;
       }
       ctx.drawImage(src, qrX, qrY, qrSize, qrSize);
 
-      // Текст
       ctx.fillStyle = '#000000';
       ctx.textAlign = landscape ? 'left' : 'center';
       const tx = landscape ? (qrX + qrSize + 8) : pw / 2;
-      let ty   = landscape ? 20 : (qrY + qrSize + 14);
+      let ty   = landscape ? 16 : (qrY + qrSize + 8);
 
       const maxW = landscape ? (pw - tx - 4) : pw - 8;
+      const base = Math.min(ph, pw);
       // ID
-      ctx.font = `bold ${Math.round(Math.min(ph, pw) * 0.09)}px Courier New`;
+      const idSize = Math.round(base * 0.09);
+      ctx.font = `bold ${idSize}px Courier New`;
       ctx.fillText(id, tx, ty, maxW);
-      ty += Math.round(Math.min(ph, pw) * 0.11);
+      ty += Math.round(idSize * 1.3);
       // Наименование — перенос если длинное
-      ctx.font = `${Math.round(Math.min(ph, pw) * 0.07)}px Segoe UI`;
+      const nameSize = Math.round(base * 0.07);
+      ctx.font = `${nameSize}px Segoe UI`;
       const words = name.split(' ');
       let line = '';
       for (const w of words) {
         const test = line ? line + ' ' + w : w;
         if (ctx.measureText(test).width > maxW && line) {
           ctx.fillText(line, tx, ty, maxW);
-          ty += Math.round(Math.min(ph, pw) * 0.09);
+          ty += Math.round(nameSize * 1.25);
           line = w;
         } else { line = test; }
       }
-      if (line) { ctx.fillText(line, tx, ty, maxW); ty += Math.round(Math.min(ph, pw) * 0.09); }
+      if (line) { ctx.fillText(line, tx, ty, maxW); ty += Math.round(nameSize * 1.25); }
       // Подстрока (ЛПУ или артикул)
       if (sub) {
         ctx.fillStyle = '#555555';
-        ctx.font = `${Math.round(Math.min(ph, pw) * 0.06)}px Segoe UI`;
+        const subSize = Math.round(base * 0.065);
+        ctx.font = `${subSize}px Segoe UI`;
         ctx.fillText(sub, tx, ty, maxW);
       }
     };
@@ -401,7 +403,7 @@ function buildPrintCanvas() {
     const tmp = document.createElement('div');
     tmp.style.cssText = 'position:absolute;left:-9999px;top:-9999px;';
     document.body.appendChild(tmp);
-    const qrSize = Math.round(Math.min(currentW, currentH) * 0.55);
+    const qrSize = Math.round(Math.min(currentW, currentH) * 0.65);
     new QRCode(tmp, {
       text: qrUrl, width: qrSize, height: qrSize,
       colorDark: '#000000', colorLight: '#ffffff',
@@ -421,36 +423,40 @@ function buildPrintCanvas() {
           qrY = Math.round((currentH - qrSize) / 2);
         } else {
           qrX = Math.round((currentW - qrSize) / 2);
-          qrY = 10;
+          qrY = 8;
         }
         ctx.drawImage(src, qrX, qrY, qrSize, qrSize);
 
         ctx.fillStyle = '#000000';
         ctx.textAlign = landscape ? 'left' : 'center';
         const tx = landscape ? (qrX + qrSize + 10) : currentW / 2;
-        let ty   = landscape ? 24 : (qrY + qrSize + 16);
+        let ty   = landscape ? 16 : (qrY + qrSize + 8);
         const maxW = landscape ? (currentW - tx - 6) : currentW - 10;
+        const base = Math.min(currentH, currentW);
 
-        ctx.font = `bold ${Math.round(Math.min(currentH, currentW) * 0.09)}px Courier New`;
+        const idSize = Math.round(base * 0.09);
+        ctx.font = `bold ${idSize}px Courier New`;
         ctx.fillText(id, tx, ty, maxW);
-        ty += Math.round(Math.min(currentH, currentW) * 0.11);
+        ty += Math.round(idSize * 1.3);
 
-        ctx.font = `${Math.round(Math.min(currentH, currentW) * 0.07)}px Segoe UI`;
+        const nameSize = Math.round(base * 0.07);
+        ctx.font = `${nameSize}px Segoe UI`;
         const words = name.split(' ');
         let line = '';
         for (const w of words) {
           const test = line ? line + ' ' + w : w;
           if (ctx.measureText(test).width > maxW && line) {
             ctx.fillText(line, tx, ty, maxW);
-            ty += Math.round(Math.min(currentH, currentW) * 0.09);
+            ty += Math.round(nameSize * 1.25);
             line = w;
           } else { line = test; }
         }
-        if (line) { ctx.fillText(line, tx, ty, maxW); ty += Math.round(Math.min(currentH, currentW) * 0.09); }
+        if (line) { ctx.fillText(line, tx, ty, maxW); ty += Math.round(nameSize * 1.25); }
 
         if (sub) {
           ctx.fillStyle = '#555555';
-          ctx.font = `${Math.round(Math.min(currentH, currentW) * 0.06)}px Segoe UI`;
+          const subSize = Math.round(base * 0.065);
+          ctx.font = `${subSize}px Segoe UI`;
           ctx.fillText(sub, tx, ty, maxW);
         }
         resolve(canvas);
