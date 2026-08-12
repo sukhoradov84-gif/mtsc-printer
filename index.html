@@ -6,57 +6,48 @@
   <title>МТСК · Печать наклейки</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: #EEF1F6; color: #16233F;
-      min-height: 100vh; display: flex; align-items: center;
-      justify-content: center; padding: 20px;
-    }
-    .card {
-      background: #fff; border-radius: 4px;
-      box-shadow: 0 4px 20px rgba(22,35,63,0.12);
-      padding: 28px 28px 24px; width: 100%; max-width: 400px;
-      border-top: 4px solid #C43E1D;
-    }
-    .eyebrow {
-      font-family: 'Courier New', monospace; font-size: 10px;
-      letter-spacing: 2px; color: #6B7686; text-transform: uppercase;
-      margin-bottom: 4px; text-align: center;
-    }
-    h1 { font-size: 18px; font-weight: 700; text-transform: uppercase;
-         letter-spacing: 0.5px; margin-bottom: 16px; text-align: center; }
-    .type-tabs { display: flex; gap: 0; margin-bottom: 16px; border: 1px solid #D9E0EA; border-radius: 3px; overflow: hidden; }
-    .type-tab {
-      flex: 1; padding: 9px 4px; border: none; background: #F5F7FC;
-      font-size: 12px; font-weight: 700; cursor: pointer; text-align: center;
-      text-transform: uppercase; letter-spacing: 0.3px; color: #6B7686;
-      border-right: 1px solid #D9E0EA;
-    }
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #EEF1F6; color: #16233F; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; }
+    .card { background: #fff; border-radius: 4px; box-shadow: 0 4px 20px rgba(22,35,63,0.12); padding: 28px 28px 24px; width: 100%; max-width: 420px; border-top: 4px solid #C43E1D; }
+    .eyebrow { font-family: 'Courier New', monospace; font-size: 10px; letter-spacing: 2px; color: #6B7686; text-transform: uppercase; margin-bottom: 4px; text-align: center; }
+    h1 { font-size: 18px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 16px; text-align: center; }
+    .type-tabs { display: flex; margin-bottom: 16px; border: 1px solid #D9E0EA; border-radius: 3px; overflow: hidden; }
+    .type-tab { flex: 1; padding: 9px 4px; border: none; background: #F5F7FC; font-size: 12px; font-weight: 700; cursor: pointer; text-align: center; text-transform: uppercase; letter-spacing: 0.3px; color: #6B7686; border-right: 1px solid #D9E0EA; }
     .type-tab:last-child { border-right: none; }
     .type-tab.active { background: #16233F; color: #fff; }
     .fields { margin-bottom: 14px; display: flex; flex-direction: column; gap: 8px; }
     .field label { display: block; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.3px; color: #6B7686; margin-bottom: 3px; }
-    .field input { width: 100%; padding: 8px 10px; border: 1px solid #D9E0EA; border-radius: 3px; font-size: 13px; font-family: inherit; }
-    .field input:focus { outline: none; border-color: #16233F; }
-    .preview-wrap { border: 1px solid #D9E0EA; border-radius: 3px; background: #fff; margin-bottom: 14px; display: flex; align-items: center; justify-content: center; overflow: hidden; min-height: 120px; padding: 8px; }
-    #labelPreviewCanvas { display: block; }
+    .field input, .field textarea { width: 100%; padding: 8px 10px; border: 1px solid #D9E0EA; border-radius: 3px; font-size: 13px; font-family: inherit; }
+    .field textarea { resize: none; height: 56px; }
+    .field input:focus, .field textarea:focus { outline: none; border-color: #16233F; }
+
+    /* Превью — два рядом */
+    .previews { display: flex; gap: 10px; margin-bottom: 14px; }
+    .preview-col { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; }
+    .preview-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.3px; color: #6B7686; }
+    .preview-wrap { border: 1px solid #D9E0EA; border-radius: 3px; background: #fff; display: flex; align-items: center; justify-content: center; padding: 6px; width: 100%; }
+    .preview-wrap canvas { display: block; max-width: 100%; }
+
     .tape-section { margin-bottom: 14px; }
-    .tape-section label { display: block; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.3px; color: #6B7686; margin-bottom: 6px; }
+    .tape-section > label { display: block; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.3px; color: #6B7686; margin-bottom: 6px; }
     .tape-grid { display: flex; flex-wrap: wrap; gap: 6px; }
     .tape-btn { padding: 5px 10px; border: 1px solid #D9E0EA; border-radius: 3px; background: #F5F7FC; font-size: 12px; font-weight: 600; cursor: pointer; font-family: 'Courier New', monospace; color: #16233F; }
     .tape-btn.active { background: #16233F; color: #fff; border-color: #16233F; }
     .tape-custom { display: flex; gap: 6px; margin-top: 6px; }
     .tape-custom input { flex: 1; padding: 5px 8px; border: 1px solid #D9E0EA; border-radius: 3px; font-size: 12px; text-align: center; }
+
     .btn { display: block; width: 100%; padding: 11px; border: none; border-radius: 3px; font-size: 13px; font-weight: 700; letter-spacing: 0.3px; cursor: pointer; margin-bottom: 8px; text-transform: uppercase; font-family: inherit; }
-    .btn-primary { background: #16233F; color: #fff; }
-    .btn-primary:hover { background: #223259; }
+    .btn-primary   { background: #16233F; color: #fff; }
+    .btn-primary:hover   { background: #223259; }
     .btn-primary:disabled { background: #B7BFC8; cursor: default; }
-    .btn-teal { background: #1F7A5C; color: #fff; }
-    .btn-teal:hover { background: #185f47; }
+    .btn-teal      { background: #1F7A5C; color: #fff; }
+    .btn-teal:hover      { background: #185f47; }
+    .btn-amber     { background: #B8722B; color: #fff; }
+    .btn-amber:hover     { background: #9a5e22; }
     .btn-secondary { background: #EEF1F6; color: #16233F; border: 1px solid #D9E0EA; }
+
     .status { margin-top: 8px; font-size: 12.5px; min-height: 18px; color: #6B7686; text-align: center; }
-    .status.ok { color: #1F7A5C; }
-    .status.err { color: #C43E1D; }
+    .status.ok   { color: #1F7A5C; }
+    .status.err  { color: #C43E1D; }
     .status.info { color: #2B5FA8; }
     .tear-line { border-bottom: 2px dashed #C7CFDC; margin: 14px 0; }
     #libStatus { font-size: 11px; color: #6B7686; margin-bottom: 8px; text-align: center; min-height: 14px; }
@@ -67,13 +58,27 @@
 <div class="card">
   <div class="eyebrow">МТСК · Складской модуль</div>
   <h1>🖨️ Печать наклейки</h1>
+
   <div class="type-tabs">
     <button class="type-tab active" id="tab-rem"   onclick="setType('rem')">🔧 Ремонт</button>
     <button class="type-tab"        id="tab-part"  onclick="setType('part')">📦 Запчасть</button>
     <button class="type-tab"        id="tab-order" onclick="setType('order')">🛒 Заказ</button>
   </div>
+
   <div class="fields" id="fieldsBlock"></div>
-  <div class="preview-wrap"><canvas id="labelPreviewCanvas"></canvas></div>
+
+  <!-- Два превью -->
+  <div class="previews">
+    <div class="preview-col">
+      <div class="preview-label">1 · QR-наклейка</div>
+      <div class="preview-wrap"><canvas id="previewQR"></canvas></div>
+    </div>
+    <div class="preview-col">
+      <div class="preview-label">2 · Текстовая</div>
+      <div class="preview-wrap"><canvas id="previewText"></canvas></div>
+    </div>
+  </div>
+
   <div class="tape-section">
     <label>Размер ленты</label>
     <div class="tape-grid" id="tapeGrid"></div>
@@ -83,11 +88,13 @@
       <button class="tape-btn" onclick="applyCustomSize()">✓</button>
     </div>
   </div>
+
   <div class="tear-line"></div>
   <div id="libStatus">Загрузка библиотеки принтера...</div>
   <button class="btn btn-primary" id="connectBtn" onclick="connectPrinter()" disabled>🔵 Подключить B1</button>
-  <button class="btn btn-teal"    id="printBtn"   onclick="printLabel()"    disabled>🖨️ Напечатать</button>
-  <button class="btn btn-secondary"               onclick="updatePreview()">🔄 Обновить превью</button>
+  <button class="btn btn-teal"    id="printQrBtn" onclick="printQR()"    disabled>🖨️ Печатать QR-наклейку</button>
+  <button class="btn btn-amber"   id="printTxtBtn" onclick="printText()" disabled>🖨️ Печатать текстовую</button>
+  <button class="btn btn-secondary"               onclick="updatePreviews()">🔄 Обновить превью</button>
   <div class="status" id="status">Инициализация...</div>
   <div class="tear-line"></div>
   <div class="hint">Работает только в <strong>Chrome</strong> на ПК или Android.<br>Bluetooth должен быть включён.</div>
@@ -99,7 +106,6 @@
 const ENGINEER_APP_URL  = 'https://script.google.com/macros/s/AKfycbwipZLCMyByQDkVqs_j_LOuTcd8xGTr6OMGi3DgOsU8d6rFAXWZFRGmJskU2Q4AdjNr/exec';
 const WAREHOUSE_APP_URL = 'https://script.google.com/macros/s/WAREHOUSE_DEPLOY_ID/exec';
 
-// Размерная сетка: [label, px_width, px_height]
 const TAPE_SIZES = [
   { label: '40×40', w: 320, h: 320 },
   { label: '40×30', w: 320, h: 240 },
@@ -108,20 +114,24 @@ const TAPE_SIZES = [
   { label: '60×40', w: 480, h: 320 },
 ];
 
+// Поля для каждого типа
 const TYPE_FIELDS = {
-  rem:   [
-    { id: 'f_id',   label: 'ID ремонта',   placeholder: 'REM-0001' },
-    { id: 'f_name', label: 'Наименование', placeholder: 'Дефибриллятор ДКИ-Н-10' },
-    { id: 'f_lpu',  label: 'ЛПУ',          placeholder: 'ГП78' },
+  rem: [
+    { id: 'f_id',   label: 'ID ремонта',       placeholder: 'REM-0001',              tag: 'input' },
+    { id: 'f_name', label: 'Наименование',      placeholder: 'Дефибриллятор ДКИ-Н-10', tag: 'input' },
+    { id: 'f_lpu',  label: 'ЛПУ / Адрес',      placeholder: 'ГП78, ул. Купчинская 5',  tag: 'input' },
+    { id: 'f_note', label: 'Доп. информация',   placeholder: 'С/н: D081040454, неиспр.: таймер', tag: 'textarea' },
   ],
-  part:  [
-    { id: 'f_id',      label: 'ID запчасти',  placeholder: 'PART-0001' },
-    { id: 'f_name',    label: 'Наименование', placeholder: 'Аккумулятор Delta 12V' },
-    { id: 'f_article', label: 'Артикул',      placeholder: 'DTM12022' },
+  part: [
+    { id: 'f_id',      label: 'ID запчасти',   placeholder: 'PART-0001',              tag: 'input' },
+    { id: 'f_name',    label: 'Наименование',  placeholder: 'Аккумулятор Delta 12V',  tag: 'input' },
+    { id: 'f_article', label: 'Артикул',       placeholder: 'DTM12022',               tag: 'input' },
+    { id: 'f_note',    label: 'Доп. информация', placeholder: 'Ячейка А-14, мин. остаток: 2 шт.', tag: 'textarea' },
   ],
   order: [
-    { id: 'f_id',   label: 'ID заказа', placeholder: 'ORD-00041' },
-    { id: 'f_name', label: 'Описание',  placeholder: 'Кабель ЭКГ Nihon Kohden' },
+    { id: 'f_id',   label: 'ID заказа',        placeholder: 'ORD-00041',              tag: 'input' },
+    { id: 'f_name', label: 'Описание',          placeholder: 'Кабель ЭКГ Nihon Kohden', tag: 'input' },
+    { id: 'f_note', label: 'Доп. информация',   placeholder: 'Кол-во: 2 шт.',         tag: 'textarea' },
   ],
 };
 
@@ -132,294 +142,238 @@ let client      = null;
 let NiimbotBluetoothClient = null;
 let ImageEncoder           = null;
 
+// ── Утилиты ──────────────────────────────────────────────────
 function setStatus(msg, cls) {
   const el = document.getElementById('status');
   el.textContent = msg;
   el.className = 'status' + (cls ? ' ' + cls : '');
 }
-
-function getFieldVal(id) {
+function getVal(id) {
   const el = document.getElementById(id);
   return el ? el.value.trim() : '';
 }
-
 function buildQrUrl() {
-  const id = getFieldVal('f_id');
+  const id = getVal('f_id');
   if (!id) return '';
-  if (currentType === 'rem')   return ENGINEER_APP_URL   + '?repairId='  + encodeURIComponent(id);
-  if (currentType === 'part')  return WAREHOUSE_APP_URL  + '?partId='    + encodeURIComponent(id);
-  if (currentType === 'order') return ENGINEER_APP_URL   + '?action=view_order&orderId=' + encodeURIComponent(id);
+  if (currentType === 'rem')   return ENGINEER_APP_URL  + '?repairId='               + encodeURIComponent(id);
+  if (currentType === 'part')  return WAREHOUSE_APP_URL + '?partId='                 + encodeURIComponent(id);
+  if (currentType === 'order') return ENGINEER_APP_URL  + '?action=view_order&orderId=' + encodeURIComponent(id);
   return '';
 }
 
+// ── Тип и поля ───────────────────────────────────────────────
 window.setType = function(type) {
   currentType = type;
   document.querySelectorAll('.type-tab').forEach(b => b.classList.toggle('active', b.id === 'tab-' + type));
   renderFields();
-  updatePreview();
+  updatePreviews();
 };
 
 function renderFields() {
-  const block  = document.getElementById('fieldsBlock');
   const fields = TYPE_FIELDS[currentType] || [];
-  block.innerHTML = fields.map(f =>
-    `<div class="field"><label>${f.label}</label><input type="text" id="${f.id}" placeholder="${f.placeholder}" oninput="updatePreview()"></div>`
+  document.getElementById('fieldsBlock').innerHTML = fields.map(f =>
+    `<div class="field"><label>${f.label}</label>` +
+    (f.tag === 'textarea'
+      ? `<textarea id="${f.id}" placeholder="${f.placeholder}" oninput="updatePreviews()"></textarea>`
+      : `<input type="text" id="${f.id}" placeholder="${f.placeholder}" oninput="updatePreviews()">`) +
+    `</div>`
   ).join('');
-  const params = new URLSearchParams(window.location.search);
-  const map = { rem: 'repairId', part: 'partId', order: 'orderId' };
-  const idParam = params.get(map[currentType]);
-  if (idParam) { const el = document.getElementById('f_id'); if (el) el.value = idParam; }
-  ['name','lpu','article'].forEach(k => {
-    const v = params.get(k);
-    if (v) { const el = document.getElementById('f_' + k); if (el) el.value = v; }
+  // Подставляем URL-параметры
+  const p = new URLSearchParams(window.location.search);
+  const idMap = { rem: 'repairId', part: 'partId', order: 'orderId' };
+  const idVal = p.get(idMap[currentType]);
+  if (idVal) { const el = document.getElementById('f_id'); if (el) el.value = idVal; }
+  ['name','lpu','article','note'].forEach(k => {
+    const v = p.get(k); if (v) { const el = document.getElementById('f_' + k); if (el) el.value = v; }
   });
 }
 
+// ── Размер ленты ─────────────────────────────────────────────
 function renderTapeGrid() {
   document.getElementById('tapeGrid').innerHTML = TAPE_SIZES.map((s, i) =>
-    `<button class="tape-btn${i === 0 ? ' active' : ''}" onclick="selectTape(${i})" id="tape-${i}">${s.label}</button>`
+    `<button class="tape-btn${i===0?' active':''}" onclick="selectTape(${i})" id="tape-${i}">${s.label}</button>`
   ).join('');
 }
-
 window.selectTape = function(i) {
   document.querySelectorAll('.tape-btn').forEach(b => b.classList.remove('active'));
   document.getElementById('tape-' + i).classList.add('active');
-  currentW = TAPE_SIZES[i].w;
-  currentH = TAPE_SIZES[i].h;
-  updatePreview();
+  currentW = TAPE_SIZES[i].w; currentH = TAPE_SIZES[i].h;
+  updatePreviews();
 };
-
 window.applyCustomSize = function() {
   const w = parseInt(document.getElementById('customW').value);
   const h = parseInt(document.getElementById('customH').value);
-  if (!w || !h || w < 48 || h < 48) { alert('Укажите корректный размер (мин. 48px)'); return; }
+  if (!w || !h || w < 48 || h < 48) { alert('Мин. 48px'); return; }
   document.querySelectorAll('.tape-btn').forEach(b => b.classList.remove('active'));
   currentW = w; currentH = h;
-  updatePreview();
+  updatePreviews();
 };
 
-// ============================================================
-// КЛЮЧЕВАЯ ФУНКЦИЯ: строит canvas наклейки нужного размера
-// QR генерируется ТОЧНО в нужный размер — без масштабирования drawImage
-// ============================================================
-function buildLabelCanvas(w, h) {
+// ── Генерация QR ─────────────────────────────────────────────
+// Возвращает Promise<HTMLCanvasElement> с QR ровно size×size пикселей
+function generateQR(text, size) {
   return new Promise((resolve, reject) => {
-    const qrUrl = buildQrUrl();
-    const id    = getFieldVal('f_id');
-    const name  = getFieldVal('f_name');
-    const sub   = currentType === 'rem'  ? getFieldVal('f_lpu') :
-                  currentType === 'part' ? getFieldVal('f_article') : '';
-
-    if (!qrUrl || !id) { reject(new Error('Заполните поля')); return; }
-
-    const FONT = 'bold %PX%px Courier New, monospace';
-    const PAD  = Math.round(Math.min(w, h) * 0.04);
-    const GAP  = Math.round(Math.min(w, h) * 0.025);
-
-    // Вычисляем размер QR и текстовой зоны ДО генерации QR
-    let qrSize, qrX, qrY, textX, textY, maxTextW, landscape;
-    landscape = w > h;
-
-    if (landscape) {
-      // Горизонтальная лента: QR слева, текст справа
-      // QR = высота ленты минус отступ сверху и снизу
-      qrSize   = h - PAD * 2;
-      qrX      = PAD;
-      qrY      = PAD;
-      textX    = PAD + qrSize + PAD;
-      maxTextW = w - textX - PAD;
-    } else {
-      // Вертикальная / квадратная: считаем сколько места займёт текст
-      // чтобы QR мог занять остаток
-      const tmpCanvas = document.createElement('canvas');
-      const tmpCtx    = tmpCanvas.getContext('2d');
-      const nameSize0 = Math.round(Math.min(w,h) * 0.08);
-      tmpCtx.font = `bold ${nameSize0}px Courier New, monospace`;
-      maxTextW = w - PAD * 2;
-      const nameLines = wrapText(tmpCtx, name, maxTextW, nameSize0);
-      const idSz   = Math.round(Math.min(w,h) * 0.09);
-      const subSz  = Math.round(Math.min(w,h) * 0.07);
-      const textH  = Math.round(idSz * 1.3)
-                   + GAP + nameLines.length * Math.round(nameSize0 * 1.3)
-                   + (sub ? GAP + Math.round(subSz * 1.3) : 0);
-      qrSize = Math.max(h - PAD * 2 - GAP - textH, 32);
-      qrX    = Math.round((w - qrSize) / 2);
-      qrY    = PAD;
-      textX  = w / 2;
-    }
-
-    // Генерируем QR ТОЧНО в нужный размер
     const tmp = document.createElement('div');
     tmp.style.cssText = 'position:absolute;left:-9999px;top:-9999px;';
     document.body.appendChild(tmp);
     new QRCode(tmp, {
-      text: qrUrl,
-      width: qrSize, height: qrSize,
+      text, width: size, height: size,
       colorDark: '#000000', colorLight: '#ffffff',
       correctLevel: QRCode.CorrectLevel.H
     });
-
     setTimeout(() => {
-      const qrEl = tmp.querySelector('canvas') || tmp.querySelector('img');
-      if (!qrEl) { document.body.removeChild(tmp); reject(new Error('QR не сгенерирован')); return; }
-
-      const draw = (qrSrc) => {
+      const el = tmp.querySelector('canvas') || tmp.querySelector('img');
+      if (!el) { document.body.removeChild(tmp); reject(new Error('QR не сгенерирован')); return; }
+      const done = (src) => {
         document.body.removeChild(tmp);
-        const canvas = document.createElement('canvas');
-        canvas.width  = w;
-        canvas.height = h;
-        const ctx = canvas.getContext('2d');
-
-        // Фон
-        ctx.fillStyle = '#ffffff';
-        ctx.fillRect(0, 0, w, h);
-
-        // QR — рисуем 1:1, без масштабирования
-        ctx.drawImage(qrSrc, qrX, qrY, qrSize, qrSize);
-
-        // Текст
-        ctx.fillStyle = '#000000';
-
-        if (landscape) {
-          // Горизонталь: текст справа, выровнен по левому краю текстовой зоны
-          const idSz   = fitFontSize(ctx, id,   maxTextW, Math.round(h * 0.18));
-          const nameSz = fitFontSize(ctx, name, maxTextW, Math.round(h * 0.15));
-          const subSz  = sub ? fitFontSize(ctx, sub, maxTextW, Math.round(nameSz * 0.9)) : 0;
-
-          const nameLines = wrapText(ctx, name, maxTextW, nameSz);
-          const subLines  = sub ? wrapText(ctx, sub, maxTextW, subSz) : [];
-
-          const lH_id   = Math.round(idSz   * 1.3);
-          const lH_name = Math.round(nameSz  * 1.3);
-          const lH_sub  = Math.round(subSz   * 1.3);
-          const totalH  = lH_id
-                        + nameLines.length * lH_name
-                        + (subLines.length ? GAP + subLines.length * lH_sub : 0);
-
-          let ty = Math.round((h - totalH) / 2) + idSz;
-          ctx.textAlign = 'left';
-
-          ctx.font = `bold ${idSz}px Courier New, monospace`;
-          ctx.fillText(id, textX, ty);
-          ty += lH_id;
-
-          ctx.font = `bold ${nameSz}px Courier New, monospace`;
-          for (const l of nameLines) { ctx.fillText(l, textX, ty); ty += lH_name; }
-
-          if (subLines.length) {
-            ty += GAP;
-            ctx.font = `bold ${subSz}px Courier New, monospace`;
-            for (const l of subLines) { ctx.fillText(l, textX, ty); ty += lH_sub; }
-          }
-
-        } else {
-          // Вертикаль: текст под QR, центрирован
-          const idSz    = Math.round(Math.min(w,h) * 0.09);
-          const nameSz  = Math.round(Math.min(w,h) * 0.08);
-          const subSz   = Math.round(Math.min(w,h) * 0.07);
-          const nameLines = wrapText(ctx, name, w - PAD * 2, nameSz);
-          const subLines  = sub ? wrapText(ctx, sub, w - PAD * 2, subSz) : [];
-
-          let ty = qrY + qrSize + GAP + idSz;
-          ctx.textAlign = 'center';
-
-          ctx.font = `bold ${idSz}px Courier New, monospace`;
-          ctx.fillText(id, w / 2, ty);
-          ty += Math.round(idSz * 1.3) + GAP;
-
-          ctx.font = `bold ${nameSz}px Courier New, monospace`;
-          for (const l of nameLines) { ctx.fillText(l, w / 2, ty); ty += Math.round(nameSz * 1.3); }
-
-          if (subLines.length) {
-            ty += GAP;
-            ctx.font = `bold ${subSz}px Courier New, monospace`;
-            for (const l of subLines) { ctx.fillText(l, w / 2, ty); ty += Math.round(subSz * 1.3); }
-          }
-        }
-
-        resolve(canvas);
+        // Перерисовываем в канвас точного размера
+        const c = document.createElement('canvas');
+        c.width = size; c.height = size;
+        c.getContext('2d').drawImage(src, 0, 0, size, size);
+        resolve(c);
       };
-
-      if (qrEl.tagName === 'CANVAS') { draw(qrEl); }
-      else if (qrEl.complete)        { draw(qrEl); }
-      else { qrEl.onload = () => draw(qrEl); qrEl.onerror = () => { document.body.removeChild(tmp); reject(new Error('Ошибка QR')); }; }
-    }, 300);
+      if (el.tagName === 'CANVAS')  { done(el); }
+      else if (el.complete)         { done(el); }
+      else { el.onload = () => done(el); el.onerror = () => { document.body.removeChild(tmp); reject(new Error('Ошибка QR')); }; }
+    }, 250);
   });
 }
 
-// Перенос текста на строки
-function wrapText(ctx, text, maxW, size) {
-  ctx.font = `bold ${size}px Courier New, monospace`;
-  const lines = [];
-  let line = '';
-  for (const word of text.split(' ')) {
-    const test = line ? line + ' ' + word : word;
-    if (ctx.measureText(test).width > maxW && line) {
-      lines.push(line); line = word;
-    } else { line = test; }
-  }
-  if (line) lines.push(line);
-  return lines;
+// ── Наклейка 1: только QR, по центру ─────────────────────────
+async function buildQRCanvas(w, h) {
+  const url = buildQrUrl();
+  if (!url) return null;
+  const PAD    = Math.round(Math.min(w, h) * 0.04);
+  const qrSize = Math.min(w, h) - PAD * 2;
+  const qrCanvas = await generateQR(url, qrSize);
+
+  const c   = document.createElement('canvas');
+  c.width   = w; c.height = h;
+  const ctx = c.getContext('2d');
+  ctx.fillStyle = '#ffffff';
+  ctx.fillRect(0, 0, w, h);
+  const x = Math.round((w - qrSize) / 2);
+  const y = Math.round((h - qrSize) / 2);
+  ctx.drawImage(qrCanvas, x, y);  // 1:1, без масштабирования
+  return c;
 }
 
-// Подбор размера шрифта — уменьшаем пока текст (с переносами) не влезет
-function fitFontSize(ctx, text, maxW, maxSize) {
-  let size = maxSize;
-  while (size > 8) {
-    const lines = wrapText(ctx, text, maxW, size);
-    if (lines.every(l => { ctx.font = `bold ${size}px Courier New, monospace`; return ctx.measureText(l).width <= maxW; })) return size;
-    size -= 1;
+// ── Наклейка 2: только текст ──────────────────────────────────
+function buildTextCanvas(w, h) {
+  const id   = getVal('f_id');
+  const name = getVal('f_name');
+  const sub  = currentType === 'rem'  ? getVal('f_lpu') :
+               currentType === 'part' ? getVal('f_article') : '';
+  const note = getVal('f_note');
+
+  const c   = document.createElement('canvas');
+  c.width   = w; c.height = h;
+  const ctx = c.getContext('2d');
+  ctx.fillStyle = '#ffffff';
+  ctx.fillRect(0, 0, w, h);
+
+  if (!id) return c;
+
+  const FONT   = 'Courier New, monospace';
+  const PAD    = Math.round(Math.min(w, h) * 0.06);
+  const GAP    = Math.round(Math.min(w, h) * 0.04);
+  const maxW   = w - PAD * 2;
+
+  // Размеры шрифтов
+  const idSz   = Math.round(Math.min(w, h) * 0.13);
+  const nameSz = Math.round(Math.min(w, h) * 0.10);
+  const subSz  = Math.round(Math.min(w, h) * 0.09);
+  const noteSz = Math.round(Math.min(w, h) * 0.08);
+
+  // Перенос текста
+  const wrap = (text, size) => {
+    ctx.font = `bold ${size}px ${FONT}`;
+    const lines = []; let line = '';
+    for (const w of text.split(' ')) {
+      const test = line ? line + ' ' + w : w;
+      if (ctx.measureText(test).width > maxW && line) { lines.push(line); line = w; }
+      else line = test;
+    }
+    if (line) lines.push(line);
+    return lines;
+  };
+
+  ctx.fillStyle = '#000000';
+  ctx.textAlign = 'left';
+
+  // Считаем суммарную высоту чтобы центрировать
+  const idLines   = [id];
+  const nameLines = name ? wrap(name, nameSz) : [];
+  const subLines  = sub  ? wrap(sub,  subSz)  : [];
+  const noteLines = note ? wrap(note, noteSz) : [];
+
+  const lH = (sz) => Math.round(sz * 1.35);
+  const totalH = idLines.length   * lH(idSz)
+               + (nameLines.length ? GAP + nameLines.length * lH(nameSz) : 0)
+               + (subLines.length  ? GAP + subLines.length  * lH(subSz)  : 0)
+               + (noteLines.length ? GAP + noteLines.length * lH(noteSz) : 0);
+
+  let ty = Math.round((h - totalH) / 2) + idSz;
+
+  // ID
+  ctx.font = `bold ${idSz}px ${FONT}`;
+  ctx.fillText(id, PAD, ty); ty += lH(idSz);
+
+  // Наименование
+  if (nameLines.length) {
+    ty += GAP;
+    ctx.font = `bold ${nameSz}px ${FONT}`;
+    for (const l of nameLines) { ctx.fillText(l, PAD, ty); ty += lH(nameSz); }
   }
-  return size;
+
+  // ЛПУ / артикул
+  if (subLines.length) {
+    ty += GAP;
+    ctx.font = `bold ${subSz}px ${FONT}`;
+    for (const l of subLines) { ctx.fillText(l, PAD, ty); ty += lH(subSz); }
+  }
+
+  // Доп. информация
+  if (noteLines.length) {
+    ty += GAP;
+    ctx.fillStyle = '#444444';
+    ctx.font = `${noteSz}px ${FONT}`;
+    for (const l of noteLines) { ctx.fillText(l, PAD, ty); ty += lH(noteSz); }
+  }
+
+  return c;
 }
 
-// ============================================================
-// ПРЕВЬЮ
-// ============================================================
-window.updatePreview = async function() {
-  const canvas  = document.getElementById('labelPreviewCanvas');
-  const id      = getFieldVal('f_id');
-  const qrUrl   = buildQrUrl();
+// ── Превью ────────────────────────────────────────────────────
+window.updatePreviews = async function() {
+  const MAX = 160; // макс размер превью по большей стороне
+  const scale = Math.min(MAX / currentW, MAX / currentH, 1);
+  const pw = Math.round(currentW * scale);
+  const ph = Math.round(currentH * scale);
 
-  if (!id || !qrUrl) {
-    const scale = Math.min(300 / currentW, 300 / currentH, 1);
-    canvas.width  = Math.round(currentW * scale);
-    canvas.height = Math.round(currentH * scale);
-    const ctx = canvas.getContext('2d');
-    ctx.fillStyle = '#F0F3F8';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-    ctx.fillStyle = '#B7BFC8';
-    ctx.font = '13px Segoe UI';
-    ctx.textAlign = 'center';
-    ctx.fillText('Заполните поля', canvas.width / 2, canvas.height / 2);
-    return;
-  }
-
+  // QR-превью
+  const cQR = document.getElementById('previewQR');
+  cQR.width = pw; cQR.height = ph;
   try {
-    // Строим в полном размере, потом масштабируем для отображения
-    const fullCanvas = await buildLabelCanvas(currentW, currentH);
-    const scale = Math.min(300 / currentW, 300 / currentH, 1);
-    canvas.width  = Math.round(currentW * scale);
-    canvas.height = Math.round(currentH * scale);
-    const ctx = canvas.getContext('2d');
-    ctx.drawImage(fullCanvas, 0, 0, canvas.width, canvas.height);
-  } catch(e) {
-    console.warn('Превью:', e.message);
-  }
+    const full = await buildQRCanvas(currentW, currentH);
+    if (full) cQR.getContext('2d').drawImage(full, 0, 0, pw, ph);
+  } catch(e) { /* тихо */ }
+
+  // Текстовое превью
+  const cTxt = document.getElementById('previewText');
+  cTxt.width = pw; cTxt.height = ph;
+  const full2 = buildTextCanvas(currentW, currentH);
+  cTxt.getContext('2d').drawImage(full2, 0, 0, pw, ph);
 };
 
-// ============================================================
-// BLUETOOTH
-// ============================================================
+// ── Bluetooth ─────────────────────────────────────────────────
 async function loadLib() {
   try {
     const lib = await import('./niimbluelib.esm.js');
-    NiimbotBluetoothClient = lib.NiimbotBluetoothClient;
-    ImageEncoder           = lib.ImageEncoder;
+    NiimbotBluetoothClient = lib.NiimbotBluetoothClient; ImageEncoder = lib.ImageEncoder;
   } catch(e) {
     const lib = await import('https://esm.sh/@mmote/niimbluelib@0.0.1-alpha.40');
-    NiimbotBluetoothClient = lib.NiimbotBluetoothClient;
-    ImageEncoder           = lib.ImageEncoder;
+    NiimbotBluetoothClient = lib.NiimbotBluetoothClient; ImageEncoder = lib.ImageEncoder;
   }
   if (NiimbotBluetoothClient && ImageEncoder) {
     document.getElementById('libStatus').textContent = '✅ Библиотека загружена';
@@ -441,14 +395,15 @@ window.connectPrinter = async function() {
     client = new NiimbotBluetoothClient();
     client.on('connect', () => {
       setStatus('✅ Принтер подключён!', 'ok');
-      document.getElementById('printBtn').disabled = false;
+      document.getElementById('printQrBtn').disabled  = false;
+      document.getElementById('printTxtBtn').disabled = false;
       btn.textContent = '✅ B1 подключён';
     });
     client.on('disconnect', () => {
       setStatus('Принтер отключён', '');
-      document.getElementById('printBtn').disabled = true;
-      btn.disabled = false; btn.textContent = '🔵 Подключить B1';
-      client = null;
+      document.getElementById('printQrBtn').disabled  = true;
+      document.getElementById('printTxtBtn').disabled = true;
+      btn.disabled = false; btn.textContent = '🔵 Подключить B1'; client = null;
     });
     let lastErr;
     for (let i = 1; i <= 3; i++) {
@@ -468,47 +423,59 @@ window.connectPrinter = async function() {
   }
 };
 
-window.printLabel = async function() {
+async function sendToPrinter(canvas, label) {
   if (!client) { setStatus('Принтер не подключён', 'err'); return; }
-  const btn = document.getElementById('printBtn');
-  btn.disabled = true; btn.textContent = '⏳ Печать...';
-  setStatus('Подготовка изображения...', 'info');
+  setStatus(`Подготовка ${label}...`, 'info');
   try {
-    const canvas = await buildLabelCanvas(currentW, currentH);
-    setStatus('Отправка на принтер...', 'info');
     const printTaskType = client.getPrintTaskType();
     if (!printTaskType) throw new Error('Не удалось определить тип задачи');
     const printTask = client.abstraction.newPrintTask(printTaskType, { quantity: 1, labelType: 1, density: 3, totalPages: 1 });
-    const encodedImage = ImageEncoder.encodeCanvas(canvas, 'top');
+    const encoded   = ImageEncoder.encodeCanvas(canvas, 'top');
     await printTask.printInit();
-    await printTask.printPage(encodedImage);
+    await printTask.printPage(encoded);
     await printTask.waitForFinished();
     await printTask.printEnd();
-    setStatus('✅ Наклейка распечатана!', 'ok');
+    setStatus(`✅ ${label} напечатана!`, 'ok');
   } catch(e) {
     setStatus('Ошибка печати: ' + e.message, 'err');
-  } finally {
-    btn.disabled = false; btn.textContent = '🖨️ Напечатать';
   }
+}
+
+window.printQR = async function() {
+  const btn = document.getElementById('printQrBtn');
+  btn.disabled = true; btn.textContent = '⏳...';
+  try {
+    const canvas = await buildQRCanvas(currentW, currentH);
+    if (!canvas) { setStatus('Заполните ID', 'err'); return; }
+    await sendToPrinter(canvas, 'QR-наклейка');
+  } finally { btn.disabled = false; btn.textContent = '🖨️ Печатать QR-наклейку'; }
 };
 
-// ============================================================
-// ИНИЦИАЛИЗАЦИЯ
-// ============================================================
+window.printText = async function() {
+  const btn = document.getElementById('printTxtBtn');
+  btn.disabled = true; btn.textContent = '⏳...';
+  try {
+    const canvas = buildTextCanvas(currentW, currentH);
+    await sendToPrinter(canvas, 'Текстовая наклейка');
+  } finally { btn.disabled = false; btn.textContent = '🖨️ Печатать текстовую'; }
+};
+
+// ── Инициализация ─────────────────────────────────────────────
 window.addEventListener('load', function() {
   renderTapeGrid();
-  const params = new URLSearchParams(window.location.search);
-  if      (params.get('repairId')) currentType = 'rem';
-  else if (params.get('partId'))   currentType = 'part';
-  else if (params.get('orderId'))  currentType = 'order';
+  const p = new URLSearchParams(window.location.search);
+  if      (p.get('repairId')) currentType = 'rem';
+  else if (p.get('partId'))   currentType = 'part';
+  else if (p.get('orderId'))  currentType = 'order';
   document.querySelectorAll('.type-tab').forEach(b => b.classList.toggle('active', b.id === 'tab-' + currentType));
   renderFields();
-  updatePreview();
+  updatePreviews();
   loadLib().catch(e => {
     document.getElementById('libStatus').textContent = '❌ ' + e.message;
     setStatus('Ошибка загрузки библиотеки', 'err');
   });
 });
+
 </script>
 </body>
 </html>
