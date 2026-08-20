@@ -69,7 +69,7 @@
 
 <script>
   const ENGINEER_APP_URL  = 'https://script.google.com/macros/s/AKfycbwipZLCMyByQDkVqs_j_LOuTcd8xGTr6OMGi3DgOsU8d6rFAXWZFRGmJskU2Q4AdjNr/exec';
-  const WAREHOUSE_APP_URL = 'https://script.google.com/macros/s/WAREHOUSE_DEPLOY_ID/exec'; // заменить при деплое
+  const WAREHOUSE_APP_URL = 'https://script.google.com/macros/s/AKfycbyEDyDzO-EH-zV-pLvn0BsB64Y19SzCOWat_VYyLNwZG7_yrscqq0P1vHFZbzTpKH7W/exec';
 
   const params   = new URLSearchParams(window.location.search);
   const repairId = params.get('repairId') || '';
@@ -125,13 +125,15 @@
     const confirmUrl = ENGINEER_APP_URL + '?action=confirm_part&orderId=' + encodeURIComponent(orderId);
     const selfUrl    = ENGINEER_APP_URL + '?action=self_pickup&orderId='  + encodeURIComponent(orderId);
     const viewUrl    = ENGINEER_APP_URL + '?action=view_order&orderId='   + encodeURIComponent(orderId);
+    const whUrl      = WAREHOUSE_APP_URL + '?orderId=' + encodeURIComponent(orderId);
 
     buttons.innerHTML =
       '<a class="btn btn-teal"      href="' + confirmUrl + '">✅ Подтвердить получение</a>' +
       '<a class="btn btn-primary"   href="' + selfUrl    + '">🚶 Я забрал сам (в обход склада)</a>' +
+      '<a class="btn btn-amber"     href="' + whUrl      + '">📦 Открыть в складском кабинете</a>' +
       '<a class="btn btn-secondary" href="' + viewUrl    + '">👁️ Просмотр карточки заказа</a>';
 
-    hint.innerHTML = 'Кнопки открывают кабинет инженера.<br>Если вы не инженер — используйте «Просмотр».';
+    hint.innerHTML = '«Подтвердить» и «Я забрал сам» — для инженеров.<br>«Складской кабинет» — для кладовщика.<br>«Просмотр» — для всех.';
 
   } else {
     // ── ОШИБКА ──────────────────────────────────────────────
